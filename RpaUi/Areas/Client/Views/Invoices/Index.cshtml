@@ -1,0 +1,177 @@
+﻿@model IEnumerable<RpaData.Models.tblInvoices>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+
+<div class="content-header">
+    <div class="container">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h2>Invoices</h2>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<div class="card">
+    <div class="card-body">
+        <table id="example2" class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>
+                        Id
+                    </th>
+                    <th>
+                        Invoice List
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            <b> Invoice No. </b> INV-@item.Id.ToString("000") <br />
+                            <b>Amount Due : </b> @Html.DisplayFor(modelItem => item.Amount) <br />
+                            <b> Due Date : </b> @Html.DisplayFor(modelItem => item.DueDate) <br />
+                            <b>Item : </b>@Html.DisplayFor(modelItem => item.InvoiceType.CodeName) <br />
+
+                            <hr />
+                            @if (item.tblPayments.Count() > 0)
+
+                            {
+                                <b>Payment Details</b>
+                                <p>
+                                    <span>@item.tblPayments.FirstOrDefault().AmountPaid.ToString("###,##.00")</span><br />
+                                    <span>@(item.tblPayments.FirstOrDefault().PaymentStatus ? "Paid" : "Pending Confirmation")</span>
+                                </p>
+                            }
+                            else
+                            {
+                                <a href="#addPosition" data-toggle="modal" data-target="#addPayment" data-id='["@item.Id","@item.Amount","@item.InvoiceTypeId","@item.InvoiceType.CodeName"]' class="addPosition btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-money-check-alt"></i> Make Payment
+                                </a>
+                            }
+
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success"><i class="fas fa-folder-open"></i> View Details</a>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="addPaym" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="addPayment" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center">Add Payment</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            @using (Html.BeginForm("Payment", "Invoices", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="modal-body">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <div class="form-group form-group-sm">
+
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <label for="kinaddress">Amount Paid:</label>
+                                <input type="text" class="form-control" id="amount_due" name="amount_due" />
+                                <input type="hidden" class="form-control" id="Id" name="Id" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <label for="kinaddress">Invoice Type:</label>
+                                <input type="text" class="form-control" id="invoice_type" name="invoice_type" disabled />
+                                <input type="hidden" class="form-control" id="payment_type_id" name="payment_type_id" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <label for="contract">Payment Date</label>
+                                <input type="date" class="form-control" id="payment_date" name="payment_date" required />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <label for="contract">Proof of Payment</label>
+                                <input type="file" class="form-control" id="proof_of_payment" name="proof_of_payment" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <label for="cntrct_desc">Payment Details:</label>
+                                <textarea class="form-control" rows="5" id="payment_details" name="payment_details" placeholder="Eg. From CBZ account 12345677"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <br />
+                            <input type="submit" class="btn btn-success btn-sm form-control" value="Save">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".addPosition").click(function () {
+            var my_id_value = $(this).data('id');
+            $("#addPayment").find('input[name="Id"]').val(my_id_value[0]);
+            $("#addPayment").find('input[name="amount_due"]').val(my_id_value[1]);
+            $("#addPayment").find('input[name="payment_type_id"]').val(my_id_value[2]);
+            $("#addPayment").find('input[name="invoice_type"]').val(my_id_value[3]);
+        })
+    });
+</script>

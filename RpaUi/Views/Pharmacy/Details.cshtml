@@ -1,0 +1,55 @@
+﻿@model RpaData.Models.tblPharmacy
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+<div class="card ">
+    <div class="card-header">
+        <h4>Pharmacy</h4>
+    </div>
+    <div class="card-body">
+        <div>
+
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.pharmacyName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.pharmacyName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.pharmacyAddress)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.pharmacyAddress)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.pharmacyPhone)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.pharmacyPhone)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.pharmacyWebsite)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.pharmacyWebsite)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.created)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.created)
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <a asp-action="Edit" asp-route-id="@Model.id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>

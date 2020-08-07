@@ -1,0 +1,48 @@
+﻿@model RpaData.Models.tblResources
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+<div class="card ">
+    <div class="card-header">
+        <h4>Create</h4>
+    </div>
+    <div class="card-body">
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Create" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="ResourceName" class="control-label"></label>
+                        <input asp-for="ResourceName" class="form-control" />
+                        <span asp-validation-for="ResourceName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ResourceDescription" class="control-label"></label>
+                        <textarea  asp-for="ResourceDescription" class="form-control"  rows="10"></textarea>
+                        <span asp-validation-for="ResourceDescription" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FileName" class="control-label"></label>
+                        <input asp-for="FileName" class="form-control" type="file" />
+                        <span asp-validation-for="FileName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card-footer">
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+
+

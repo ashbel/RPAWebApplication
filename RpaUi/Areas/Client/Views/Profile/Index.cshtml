@@ -1,0 +1,133 @@
+﻿@model RpaData.Models.ViewModels.ProfileViewModel
+
+
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+<h1>Profile</h1>
+<h4>Complete Your Profile</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Index">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*<div class="form-group">
+                    <label asp-for="ClientId" class="control-label"></label>
+                    <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
+                    <span asp-validation-for="ClientId" class="text-danger"></span>
+                </div>*@
+            <div class="form-group">
+                <label asp-for="tblPharmacyid" class="control-label"></label>
+                <select asp-for="tblPharmacyid" class="form-control" asp-items="ViewBag.tblPharmacyid"></select>
+                <span asp-validation-for="tblPharmacyid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="workAddress" class="control-label"></label>
+                <input asp-for="workAddress" class="form-control" />
+                <span asp-validation-for="workAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="qualifications" class="control-label"></label>
+                @*<input asp-for="qualifications" class="form-control" />*@
+                <span asp-validation-for="qualifications" class="text-danger"></span><br />
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Bachelor of Pharmacy Hons">
+                    <label class="form-check-label" for="inlineCheckbox1">Bachelor of Pharmacy Hons</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="Bachelor of Science Pharmacy">
+                    <label class="form-check-label" for="inlineCheckbox2">Bachelor of Science Pharmacy</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="PharmD">
+                    <label class="form-check-label" for="inlineCheckbox3">PharmD</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Master of Pharmacy">
+                    <label class="form-check-label" for="inlineCheckbox1">Master of Pharmacy</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="Msc">
+                    <label class="form-check-label" for="inlineCheckbox2">Msc</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="MBA">
+                    <label class="form-check-label" for="inlineCheckbox3">MBA</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Phd">
+                    <label class="form-check-label" for="inlineCheckbox1">Phd</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="Post Grad Diploma">
+                    <label class="form-check-label" for="inlineCheckbox2">Post Grad Diploma</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="Msc Clinical Pharmacy">
+                    <label class="form-check-label" for="inlineCheckbox3">Msc Clinical Pharmacy</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Post Grad Diploma Clinical Pharmacy">
+                    <label class="form-check-label" for="inlineCheckbox1">Post Grad Diploma Clinical Pharmacy</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="Other">
+                    <label class="form-check-label" for="inlineCheckbox2">Other</label>
+                </div>
+
+                @*<select asp-for="qualifications" class="form-control">
+                    <option>Bachelor of Pharmacy Hons</option>
+                    <option>Bachelor of Science Pharmacy</option>
+                    <option>PharmD</option>
+                    <option>Master of Pharmacy</option>
+                    <option>Msc</option>
+                    <option>MBA</option>
+                    <option>PhD</option>
+                    <option>Post Grad Diploma</option>
+                    <option>Msc Clinical Pharmacy</option>
+                    <option>Post Grad Diploma Clinical Pharmacy</option>
+                    <option>Other</option>
+                </select>*@
+            </div>
+            <div class="form-group">
+                <label asp-for="yearsInPractice" class="control-label"></label>
+                <input asp-for="yearsInPractice" class="form-control" />
+                <span asp-validation-for="yearsInPractice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="dateOfJoiningRPA" class="control-label"></label>
+                <input asp-for="dateOfJoiningRPA" class="form-control" />
+                <span asp-validation-for="dateOfJoiningRPA" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="goodStandingPCZ" /> @Html.DisplayNameFor(model => model.goodStandingPCZ)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="goodStandingReasonPCZ" class="control-label"></label>
+                <input asp-for="goodStandingReasonPCZ" class="form-control" />
+                <span asp-validation-for="goodStandingReasonPCZ" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="goodStandingMCAZ" /> @Html.DisplayNameFor(model => model.goodStandingMCAZ)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="goodStandingReasonMCAZ" class="control-label"></label>
+                <input asp-for="goodStandingReasonMCAZ" class="form-control" />
+                <span asp-validation-for="goodStandingReasonMCAZ" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ClientId" />
+            <input type="hidden" asp-for="Created" />
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

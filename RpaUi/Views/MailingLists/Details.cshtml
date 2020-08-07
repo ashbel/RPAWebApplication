@@ -1,0 +1,87 @@
+﻿@model RpaData.Models.tblMailingList
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+<div class="card ">
+    <div class="card-header">
+        <h4>MailingList</h4>
+    </div>
+    <div class="card-body">
+        <div>
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ListName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ListName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ListDescription)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ListDescription)
+                </dd>
+            </dl>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                <b>Members</b>
+                <table id="" class="table table-bordered table-hover display" style="width:100%">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-sm">
+                        @foreach (var item in Model.tblMailingListClients)
+                        {
+                            <tr>
+                                <td>
+                                    @item.tblPharmacist.Client.FullName
+                                    <a href="@Url.Action("Remove","MailingLists",new { id = item.Id, mailId = Model.Id})" class="btn btn-sm btn-outline-danger float-right" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fas fa-user-minus"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <b>Available Clients</b>
+                <table id="" class="table table-bordered table-hover display" style="width:100%">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-sm">
+                        @foreach (var item in ViewBag.Clients)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Client.FullName
+                                    <a  href="@Url.Action("Add","MailingLists",new { id = Model.Id, pharmaId = item.Id})" class="btn btn-sm btn-outline-success float-right" data-toggle="tooltip" data-placement="top" title="Add"><i class="fas fa-user-plus"></i></a>
+                                </td>
+                              
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+       
+
+    </div>
+        <div class="card-footer">
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+</div>

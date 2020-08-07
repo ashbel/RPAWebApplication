@@ -1,0 +1,196 @@
+﻿@page
+@model RegisterModel
+@{
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+    ViewData["Title"] = "Register";
+}
+
+
+    <section id="contact" class="contact">
+        <div class="container">
+
+            <div class="section-title">
+                <span>Register</span>
+                <h2>Register</h2>
+            </div>
+            <div class="info">
+                <div class="row">
+
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <h2 class="card-title text-center">Register a New Account</h2>
+                        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                            <hr />
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Input.firstName"></label>
+                                        <input asp-for="Input.firstName" class="form-control" />
+                                        <span asp-validation-for="Input.firstName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Input.lastName"></label>
+                                        <input asp-for="Input.lastName" class="form-control" />
+                                        <span asp-validation-for="Input.lastName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Input.Email"></label>
+                                        <input asp-for="Input.Email" class="form-control" />
+                                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Input.PhoneNumber"></label>
+                                        <input asp-for="Input.PhoneNumber" class="form-control" />
+                                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Input.dateOfBirth"></label>
+                                        <input asp-for="Input.dateOfBirth" class="form-control" type="date" />
+                                        <span asp-validation-for="Input.dateOfBirth" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Input.gender"></label>
+                                        <select asp-for="Input.gender" class="form-control">
+                                            <option>Male</option>
+                                            <option>Female</option>
+                                        </select>
+                                        <span asp-validation-for="Input.gender" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Input.RpaNumber"></label>
+                                        <input asp-for="Input.RpaNumber" class="form-control" />
+                                        <span asp-validation-for="Input.RpaNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Input.PharmacyId" class="control-label"></label>
+                                        <select asp-for="Input.PharmacyId" class="form-control" asp-items="ViewBag.PharmacyId"></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Input.Password"></label>
+                                        <input asp-for="Input.Password" class="form-control" />
+                                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Input.ConfirmPassword"></label>
+                                        <input asp-for="Input.ConfirmPassword" class="form-control" />
+                                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Input.workAddress" class="control-label"></label>
+                                <input asp-for="Input.workAddress" class="form-control" />
+                                <span asp-validation-for="Input.workAddress" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Input.qualifications" class="control-label"></label>
+                                <span asp-validation-for="Input.qualifications" class="text-danger"></span><br />
+                               <div class="row">
+                                        @foreach (var item in ViewData["Qualification"] as IEnumerable<tblQualifications>)
+                                            {
+                                   <div class="col-md-6">
+                                       <div class="form-check form-check-inline">
+                                           <input asp-for="Input.qualifications" class="form-check-input" type="checkbox" id="@item.qName" value="@item.Id">
+                                           <label class="form-check-label" for="inlineCheckbox1">@item.qName</label>
+                                       </div>
+                                   </div>
+                                            }
+                                    </div>                              
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Input.yearsInPractice" class="control-label"></label>
+                                        <input asp-for="Input.yearsInPractice" class="form-control" />
+                                        <span asp-validation-for="Input.yearsInPractice" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Input.dateOfJoiningRPA" class="control-label"></label>
+                                        <input asp-for="Input.dateOfJoiningRPA" class="form-control" type="date"/>
+                                        <span asp-validation-for="Input.dateOfJoiningRPA" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" asp-for="Input.goodStandingPCZ" /> @Html.DisplayNameFor(model => model.Input.goodStandingPCZ)
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Input.goodStandingReasonPCZ" class="control-label"></label>
+                                        <input asp-for="Input.goodStandingReasonPCZ" class="form-control" />
+                                        <span asp-validation-for="Input.goodStandingReasonPCZ" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" asp-for="Input.goodStandingMCAZ" /> @Html.DisplayNameFor(model => model.Input.goodStandingMCAZ)
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Input.goodStandingReasonMCAZ" class="control-label"></label>
+                                        <input asp-for="Input.goodStandingReasonMCAZ" class="form-control" />
+                                        <span asp-validation-for="Input.goodStandingReasonMCAZ" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                               
+                                    <b>Declaration:</b>
+                                    <p>
+                                        By clicking the submit button below, i declare that the above information is true to the best of my knowledge at the time of making this declaration.
+                                        I further swear that the association can take corrective measures should it come to their attention that any of the information was false.
+                                    </p>
+                                    <button type="submit" class="btn  bg-green btn-block text-uppercase">Register</button>
+                        </form>
+                        <hr class="my-4">
+                        <div class="form-group text-center">
+                            <p>
+                                <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">Already Have an Account Login?</a>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            </div>
+        </section>
+
+
+
+
+
+        @section Scripts {
+            <partial name="_ValidationScriptsPartial" />
+        }

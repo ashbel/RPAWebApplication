@@ -1,0 +1,42 @@
+﻿@model RpaData.Models.tblQualifications
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<div class="card ">
+    <div class="card-header">
+        <h4>Create</h4>
+    </div>
+    <div class="card-body">
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="qName" class="control-label"></label>
+                        <input asp-for="qName" class="form-control" />
+                        <span asp-validation-for="qName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="qDescription" class="control-label"></label>
+                        <input asp-for="qDescription" class="form-control" />
+                        <span asp-validation-for="qDescription" class="text-danger"></span>
+                    </div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Created" />
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>

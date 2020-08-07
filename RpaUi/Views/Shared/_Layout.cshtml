@@ -1,0 +1,204 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPA - @ViewBag.Title</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/adminlte.min.css" rel="stylesheet">
+    <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="~/img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/jquery-ui-1.10.2.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+    <script src="~/js/site.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables -->
+    <script src="~/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/js/adminlte.min.js"></script>
+
+
+
+    <!-- page script -->
+    <script>
+        $(function () {
+            var selected = [];
+            $('#example1').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+                "order": [[0, "desc"]]
+            })
+            $('#example2').DataTable({
+                "order": [[0, "desc"]]
+            })
+            $('#example3').DataTable()
+            $('#example4').DataTable()
+            $('#example5').DataTable()
+            $('#example6').DataTable()
+            $('#example7').DataTable()
+            $('#example8').DataTable()
+            $('#example9').DataTable()
+            $('#example10').DataTable({
+                'paging': true,
+                'lengthChange': false,
+                'searching': false,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false
+            })
+
+            var table = $("#example11").DataTable({
+                "ajax": {
+                    "url": "/Logs/GetList",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "Id", "name": "Id" },
+                    { "data": "Date", "name": "Date" },
+                    { "data": "User", "name": "User" },
+                    { "data": "Type", "name": "Type" },
+                    { "data": "Status", "name": "Status" },
+                    { "data": "Text", "name": "Text" },
+                ],
+                "processing": "true",
+                "serverSide": "true",
+                "language": {
+                    "processing": "processing... please wait"
+                },
+                "rowCallback": function (row, data) {
+                    if ($.inArray(data.DT_RowData, selected) !== -1) {
+                        $(row).addClass('selected');
+                    }
+                }
+            })
+
+            $('table.display').DataTable();
+        })
+
+
+    </script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="hold-transition skin-green layout-top-nav">
+    <div class="wrapper">
+
+        <nav class="main-header navbar navbar-expand navbar-success navbar-dark">
+            <div class="container-fluid">
+                @Html.ActionLink("Rpa", "Home", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <partial name="_LoginPartial" />
+
+                    <ul class="nav navbar-nav  flex-grow-1">
+                        <li class="nav-item d-none d-sm-inline-block">@Html.ActionLink("Home", "Home", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+
+                        <li class="nav-item dropdown d-none d-sm-inline-block">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Clients
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" asp-area="" asp-controller="Clients" asp-action="Index">Clients</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Pharmacy" asp-action="Index">Pharmacies</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Meetings
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" asp-area="" asp-controller="Meetings" asp-action="Index">Meetings</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Certificates" asp-action="Index">Certificates</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Payments
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" asp-area="" asp-controller="Payments" asp-action="Index">Payments</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Invoices" asp-action="Index">Invoices</a>
+                            </div>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
+                                Configurations
+                                <span class="caret"></span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" asp-area="" asp-controller="Communications" asp-action="Index">Communication</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Codes" asp-action="Index">Codes</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Qualifications" asp-action="Index">Qualifications</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Resources" asp-action="Index">Resources</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="MailingLists" asp-action="Index">Mailing List</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Jobs" asp-action="Index">Jobs</a>
+                            </div>
+                        </li>
+
+                        @{
+
+                            if (User.IsInRole("Administrator"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
+                                        Administration
+                                        <span class="caret"></span>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        <a class="dropdown-item" asp-area="" asp-controller="Emails" asp-action="Index">Emails</a>
+                                        @Html.ActionLink("Users", "Index", "Users", new { area = "" }, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("Roles", "Index", "Roles", new { area = "" }, new { @class = "dropdown-item" })
+                                    </div>
+                                </li>
+
+
+                            }
+
+                        }
+                    </ul>
+
+                </div>
+            </div>
+
+        </nav>
+
+        <div class="content-wrapper">
+            <div class="container-fluid">
+                <section class="content">
+                    @RenderBody()
+                </section>
+            </div>
+        </div>
+
+        <footer class="main-footer">
+            <div class="float-right d-none d-sm-block">
+                <b>Version</b> 3.0.5
+            </div>
+            <strong>Copyright &copy;  <a href="http://mopane.co.zw">Mopane Systems</a>.</strong> All rights
+            reserved.
+        </footer>
+
+    </div>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

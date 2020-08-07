@@ -1,0 +1,91 @@
+﻿@model RpaData.Models.tblPharmacists
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>tblPharmacists</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.workAddress)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.workAddress)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.qualifications)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.qualifications)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.yearsInPractice)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.yearsInPractice)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.dateOfJoiningRPA)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.dateOfJoiningRPA)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.goodStandingPCZ)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.goodStandingPCZ)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.goodStandingReasonPCZ)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.goodStandingReasonPCZ)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.goodStandingMCAZ)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.goodStandingMCAZ)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.goodStandingReasonMCAZ)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.goodStandingReasonMCAZ)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.profileComplete)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.profileComplete)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.tblPharmacy)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.tblPharmacy.pharmacyAddress)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Client)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Client.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Created)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Created)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

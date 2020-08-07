@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h2>Home</h2>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<section id="featured-services" class="featured-services">
+    <div class="container">
+
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-md fa-5x" aria-hidden="true"></i>
+                        <h3 class="">Profile</h3>
+                        <hr />
+                        <p> <b class="text-orange">Account Status </b> is <b class="text-blue"> @ViewBag.AccountStatus</b></p>
+                        <p class="text-purple"><b> Renewal Date @ViewBag.RenewalDate</b></p>
+                        <hr />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-calendar-check fa-5x"></i>
+                        <h3 class="text-center">Meetings</h3>
+                        <hr />
+                        <p><b class="text-orange">@ViewBag.Meetings_This_Month Meeting/s*</b> in  <b class="text-blue">@DateTime.Now.ToString("MMMM yyyy")</b></p>
+                        <p class="text-purple"><b>@ViewBag.Meetings_Year Total Meetings @DateTime.Now.ToString("yyyy")</b></p>
+                        <hr />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-chart-line  fa-5x"></i>
+                        <h3 class="text-center">Payments</h3>
+                        <hr />
+                        <p><b class="text-orange">@ViewBag.Payments_This_Month (@ViewBag.Payments_This_Month_Count)</b>  in  <b class="text-blue">@DateTime.Now.ToString("MMMM yyyy")</b></p>
+                        <p class="text-purple"><b>@ViewBag.Payments_Year Total Paid @DateTime.Now.ToString("yyyy")</b></p>
+                        <hr />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ======= Featured Services Section ======= -->
+<section id="featured-services" class="featured-services">
+    <div class="container">
+        <h4>Announcements</h4>
+        <div class="row">
+            <div class="col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="icon"><i class="icofont-computer"></i></div>
+                        <h4 class="title"><a href="">Lorem Ipsum</a></h4>
+                        <p class="description">Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-4 mt-md-0">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="icon"><i class="icofont-image"></i></div>
+                        <h4 class="title"><a href="">Dolor Sitema</a></h4>
+                        <p class="description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mt-4 mt-lg-0">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="icon"><i class="icofont-tasks-alt"></i></div>
+                        <h4 class="title"><a href="">Sed ut perspiciatis</a></h4>
+                        <p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section><!-- End Featured Services Section -->
+<p><br /></p>

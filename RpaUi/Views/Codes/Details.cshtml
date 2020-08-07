@@ -1,0 +1,39 @@
+﻿@model RpaData.Models.tblCodes
+
+@{
+    ViewData["Title"] = "Codes";
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="card ">
+    <div class="card-header">
+        <h4>Details</h4>
+    </div>
+    <div class="card-body">           
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CodeName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CodeName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CodeEntity)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CodeEntity)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Created)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Created)
+                </dd>
+            </dl>
+        </div>
+        <div class="card-footer">
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+</div>

@@ -1,0 +1,53 @@
+﻿@model RpaData.Models.tblCertificates
+
+@{
+    ViewData["Title"] = "Certificates";
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="card ">
+    <div class="card-header">
+        <h4>Certificates</h4>
+    </div>
+    <div class="card-body">
+        <div>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.EventPoints)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.EventPoints)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CertificateDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CertificateDate)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Client)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Client.FullName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Event)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Event.EventName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Created)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Created)
+                </dd>
+            </dl>
+        </div>
+</div>
+        <div class="card-footer">
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>

@@ -1,0 +1,59 @@
+﻿@model RpaData.Models.tblPharmacy
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<div class="card ">
+    <div class="card-header">
+        <h4>Pharmacy</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="id" />
+                    <input type="hidden" asp-for="created" />
+                    <div class="form-group">
+                        <label asp-for="pharmacyName" class="control-label"></label>
+                        <input asp-for="pharmacyName" class="form-control" />
+                        <span asp-validation-for="pharmacyName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="pharmacyAddress" class="control-label"></label>
+                        <input asp-for="pharmacyAddress" class="form-control" />
+                        <span asp-validation-for="pharmacyAddress" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="pharmacyPhone" class="control-label"></label>
+                        <input asp-for="pharmacyPhone" class="form-control" />
+                        <span asp-validation-for="pharmacyPhone" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="pharmacyWebsite" class="control-label"></label>
+                        <input asp-for="pharmacyWebsite" class="form-control" />
+                        <span asp-validation-for="pharmacyWebsite" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

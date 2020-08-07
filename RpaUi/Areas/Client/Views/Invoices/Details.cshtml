@@ -1,0 +1,73 @@
+﻿@model RpaData.Models.tblInvoices
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+    
+    <div class="content-header">
+        <div class="container">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h3>INV-@Model.Id.ToString("000") - Details</h3>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+<div class="card">
+    <div class="card-body">
+        <div>
+            <a asp-action="Index" class="btn btn-sm btn-outline-success">  <i class="fas fa-long-arrow-alt-left"></i> Back to List</a> |
+            <a href="@Url.Action("Confirm", "Events", new { id = Model.Id, attend = true })" class="btn btn-sm btn-outline-primary">  <i class="fas fa-money-check-alt"></i> Make Payment</a>
+
+        </div>
+
+        <div>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Amount)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Amount)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.DueDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.DueDate)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.InvoiceComment)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.InvoiceComment)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.InvoiceType)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.InvoiceType.CodeName)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Created)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Created)
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div>
+            <a asp-action="Index" class="btn btn-sm btn-outline-success">  <i class="fas fa-long-arrow-alt-left"></i> Back to List</a> |
+            <a href="@Url.Action("Confirm", "Events", new { id = Model.Id, attend = true })" class="btn btn-sm btn-outline-primary">  <i class="fas fa-money-check-alt"></i> Make Payment</a>
+        </div>
+    </div>
+</div>
+
+
+

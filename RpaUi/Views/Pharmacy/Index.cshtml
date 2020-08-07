@@ -1,0 +1,86 @@
+﻿@model IEnumerable<RpaData.Models.tblPharmacy>
+
+@{
+    ViewData["Title"] = "Pharmacy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="card">
+    <div class="card-header">
+   
+                <a href="@Url.Action("Create")" class="btn btn-info btn-sm">CREATE</a>
+                <a data-toggle="modal" data-target="#importModal" class="btn btn-info btn-sm">IMPORT</a>
+                 
+    </div>
+    <div class="card-body">
+        <table id="example2"  class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.pharmacyName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.pharmacyAddress)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody  class="table-sm">
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.pharmacyName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.pharmacyAddress)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a>
+                        <a asp-action="Details" asp-route-id="@item.id" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Details"><i class="fas fa-folder-open"></i></a>
+                        <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash-alt"></i></a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="modal fade" id="importModal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">Upload Pharmacies</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("Upload", "Pharmacy", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="form-group form-group-sm">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="inputFile">File input</label>
+                                <input type="file" id="inputFile" name="inputFile" class="form-control" accept=".csv">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <br />
+                            <input type="submit" class="btn btn-success btn-sm form-control" value="Submit">
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+              
+            </div>
+        </div>
+    </div>
+</div>

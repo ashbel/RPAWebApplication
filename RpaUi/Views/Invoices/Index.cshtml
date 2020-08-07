@@ -1,0 +1,58 @@
+﻿@model IEnumerable<RpaData.Models.tblInvoices>
+
+@{
+    ViewData["Title"] = "Invoices";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <h1>@ViewData["Title"]</h1>
+
+<div class="card ">
+    <div class="card-header">
+        <div class="btn-group btn-group-sm pull-right">
+            <div class="btn-group btn-group-sm pull-right">
+                <a href="@Url.Action("Create")" class="btn btn-info btn-sm">CREATE</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="example2" class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Amount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DueDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.InvoiceType)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="table-sm">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DueDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InvoiceType.CodeName)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Details"><i class="fas fa-folder-open"></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash-alt"></i></a>
+                            <a asp-action="SendEmail" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Send"><i class="fas fa-paper-plane"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+﻿@model RpaData.Models.tblCodes
+
+@{
+    ViewData["Title"] = "Codes";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="card ">
+    <div class="card-header">
+        <h4>Create</h4>
+    </div>
+    <div class="card-body">
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="CodeName" class="control-label"></label>
+                        <input asp-for="CodeName" class="form-control" />
+                        <span asp-validation-for="CodeName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CodeEntity" class="control-label"></label>
+                        <input asp-for="CodeEntity" class="form-control" />
+                        <span asp-validation-for="CodeEntity" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+
+    </div>
+</div>
+
