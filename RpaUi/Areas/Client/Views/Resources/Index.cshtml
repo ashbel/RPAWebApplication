@@ -1,0 +1,66 @@
+﻿@model IEnumerable<RpaData.Models.tblResources>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+
+<div class="content-header">
+    <div class="container">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h2>Resources</h2>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<div class="card">
+    <div class="card-body">
+        <table id="example2" class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Id</th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ResourceName)
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        
+                    </th>
+                </tr>
+            </thead>
+            <tbody  class="table-sm">
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ResourceName)
+                    </td>
+
+                    <td>
+                        @item.Created.ToString("dd-MM-yyyy")
+                    </td>
+                    <td>
+                        @if (!String.IsNullOrEmpty(item.FileName))
+                        {
+                            <a href="~/Uploads/@item.FileName" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Download"> <i class="fas fa-download fa-1x"></i></a>
+                        }
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Details"><i class="fas fa-folder-open"></i></a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+     </div>
+</div>
