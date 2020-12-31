@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RpaData.Models.tblEvents>
+﻿@model IEnumerable<RpaData.Models.tblEventsHistory>
 
 @{
     ViewData["Title"] = "Index";
@@ -41,37 +41,39 @@
                                     @Html.DisplayFor(modelItem => item.Id)
                                 </td>
                                 <td>
-                                    <b>Meeting Name : </b> @Html.DisplayFor(modelItem => item.EventName) <br />
+                                    <b>Meeting Name : </b> @Html.DisplayFor(modelItem => item.Event.EventName) <br />
 
-                                    <b>Date : </b>  @Html.DisplayFor(modelItem => item.EventStartDate) to
+                                    <b>Date : </b>  @Html.DisplayFor(modelItem => item.Event.EventStartDate) to
 
-                                    @Html.DisplayFor(modelItem => item.EventEndDate) <br />
+                                    @Html.DisplayFor(modelItem => item.Event.EventEndDate) <br />
 
-                                    <b>Venue : </b> @Html.DisplayFor(modelItem => item.EventVenue) <br />
+                                    <b>Venue : </b> @Html.DisplayFor(modelItem => item.Event.EventVenue) <br />
 
-                                    <b>Points : </b>@Html.DisplayFor(modelItem => item.EventPoints) <br />
+                                    <b>Points : </b>@Html.DisplayFor(modelItem => item.Event.EventPoints) <br />
 
                                     <hr />
                                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success"><i class="fas fa-folder-open"></i> View Details</a>
-                                    @if (item.tblEventsHistory.Count() > 0)
+                                    @if (item.Event.tblEventsHistory.Count() > 0)
                                     {
-                                        bool? attending = item.tblEventsHistory.FirstOrDefault()?.Attending;
-                                        bool? attendend = item.tblEventsHistory.FirstOrDefault()?.AttendedEvent;
+                                        bool? attending = item.Event.tblEventsHistory.FirstOrDefault()?.Attending;
+                                        bool? attendend = item.Event.tblEventsHistory.FirstOrDefault()?.AttendedEvent;
 
-
-                                        @if (attending.Value)
+                                        @if(!item.Event.EventComplete)
                                         {
-                                            <a href="@Url.Action("Confirm", "Events", new { id = item.Id, attend = false })" class="btn btn-sm btn-outline-danger">  <i class="far fa-thumbs-down"></i> RSVP (Decline)</a>
-                                        }
-                                        else
-                                        {
-                                            <a href="@Url.Action("Confirm", "Events", new { id = item.Id, attend = true })" class="btn btn-sm btn-outline-primary">  <i class="far fa-thumbs-up"></i>  RSVP (Accept)</a>
-                                        }
 
+                                            @if (attending.Value)
+                                            {
+                                                <a href="@Url.Action("Confirm", "Events", new {id = item.Event.Id, attend = false})" class="btn btn-sm btn-outline-danger"> <i class="far fa-thumbs-down"></i> RSVP (Decline)</a>
+                                            }
+                                            else
+                                            {
+                                                <a href="@Url.Action("Confirm", "Events", new {id = item.Event.Id, attend = true})" class="btn btn-sm btn-outline-primary"> <i class="far fa-thumbs-up"></i> RSVP (Accept)</a>
+                                            }
+                                        }
                                     }
                                     else
                                     {
-                                        <a href="@Url.Action("Confirm", "Events", new { id = item.Id, attend = true })" class="btn btn-sm btn-outline-primary">  <i class="far fa-thumbs-up"></i>  RSVP (Accept)</a>
+                                        <a href="@Url.Action("Confirm", "Events", new { id = item.Event.Id, attend = true })" class="btn btn-sm btn-outline-primary">  <i class="far fa-thumbs-up"></i>  RSVP (Accept)</a>
                                     }
 
 
@@ -82,7 +84,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="card-footer"
+            <div class="card-footer">
 
     </div>
         </div>

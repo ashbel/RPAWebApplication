@@ -26,7 +26,7 @@ namespace RpaData.Claims
             var identity = await base.GenerateClaimsAsync(user);
             if (await UserManager.IsInRoleAsync(user,"Client"))
             {
-                var clientId = _context.tblPharmacists.FirstOrDefaultAsync(c => c.ClientId == user.Id);
+                var clientId = _context.tblPharmacists.FirstOrDefaultAsync(c => c.ApplicationUserId == user.Id);
                 identity.AddClaim(new Claim("ClientId",clientId.Result.Id.ToString()));
                 identity.AddClaim(new Claim("IsProfileComplete", clientId.Result.profileComplete.ToString()));
             }

@@ -9,7 +9,7 @@ namespace RpaData.Models
     {
         [Required]
         [Display(Name = "Client")]
-        public string ClientId { get; set; }
+        public int tblPharmacistsId { get; set; }
 
         [Required]
         [ForeignKey("tblEvents")]
@@ -24,7 +24,7 @@ namespace RpaData.Models
      
         [Display(Name = "Comment")]
         public string EventHistoryComment { get; set; }
-        public ApplicationUser Client { get; set; }
+        public virtual tblPharmacists tblPharmacists { get; set; }
         public  virtual tblEvents Event { get; set; }
     }
 }

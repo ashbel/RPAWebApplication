@@ -33,7 +33,7 @@ namespace RpaUi.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var clientId = identity.FindFirst("UserId").Value;
 
-            return await _context.tblPharmacists.Include(c => c.Client).Include(t => t.tblPharmacy).FirstOrDefaultAsync(c => c.ClientId == clientId);
+            return await _context.tblPharmacists.Include(c => c.ApplicationUser).Include(t => t.tblPharmacy).FirstOrDefaultAsync(c => c.ApplicationUserId == clientId);
         }
 
         // GET: api/ClientsApi/5

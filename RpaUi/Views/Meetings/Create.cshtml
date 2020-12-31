@@ -5,59 +5,73 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
-<div class="card ">
-    <div class="card-header">
-        <h4>Meetings</h4>
-    </div>
-    <div class="card-body">
-        <hr />
-        <div class="row">
-            <div class="col-md-4">
-                <form asp-action="Create">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="EventName" class="control-label"></label>
-                        <input asp-for="EventName" class="form-control" />
-                        <span asp-validation-for="EventName" class="text-danger"></span>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h2 class="m-0 text-dark">@ViewData["Title"]</h2>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="card ">
+            <div class="card-header">
+                <h4>Meetings</h4>
+            </div>
+            <div class="card-body">
+                <hr />
+                <div class="row">
+                    <div class="col-md-4">
+                        <form asp-action="Create">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="EventName" class="control-label"></label>
+                                <input asp-for="EventName" class="form-control" />
+                                <span asp-validation-for="EventName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="EventStartDate" class="control-label"></label>
+                                <input asp-for="EventStartDate" class="form-control" />
+                                <span asp-validation-for="EventStartDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="EventEndDate" class="control-label"></label>
+                                <input asp-for="EventEndDate" class="form-control" />
+                                <span asp-validation-for="EventEndDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="EventVenue" class="control-label"></label>
+                                <input asp-for="EventVenue" class="form-control" />
+                                <span asp-validation-for="EventVenue" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="EventPoints" class="control-label"></label>
+                                <input asp-for="EventPoints" class="form-control" />
+                                <span asp-validation-for="EventPoints" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="EventDescription" class="control-label"></label>
+                                <textarea asp-for="EventDescription" rows="5" class="form-control"></textarea>
+                                <span asp-validation-for="EventDescription" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Create" class="btn btn-primary form-control" />
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="EventStartDate" class="control-label"></label>
-                        <input asp-for="EventStartDate" class="form-control" />
-                        <span asp-validation-for="EventStartDate" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="EventEndDate" class="control-label"></label>
-                        <input asp-for="EventEndDate" class="form-control" />
-                        <span asp-validation-for="EventEndDate" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="EventVenue" class="control-label"></label>
-                        <input asp-for="EventVenue" class="form-control" />
-                        <span asp-validation-for="EventVenue" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="EventPoints" class="control-label"></label>
-                        <input asp-for="EventPoints" class="form-control" />
-                        <span asp-validation-for="EventPoints" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="EventDescription" class="control-label"></label>
-                        <textarea asp-for="EventDescription" rows="5" class="form-control" ></textarea>
-                        <span asp-validation-for="EventDescription" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Create" class="btn btn-primary form-control" />
-                    </div>
-                </form>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div>
+                    <a asp-action="Index">Back to List</a>
+                </div>
+
             </div>
         </div>
     </div>
-    <div class="card-footer">
-        <div>
-            <a asp-action="Index">Back to List</a>
-        </div>
-
-    </div>
-</div>
-
+</section>

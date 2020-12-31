@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using RpaData.Models;
+using RpaUi.Interfaces;
+using RpaUi.Services;
 
 namespace RpaUi.Areas.Identity.Pages.Account
 {
@@ -18,9 +20,9 @@ namespace RpaUi.Areas.Identity.Pages.Account
     public class ForgotPasswordModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly IMyEmailSender _emailSender;
 
-        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IMyEmailSender emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;

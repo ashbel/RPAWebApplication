@@ -37,14 +37,14 @@ namespace RpaUi.Controllers
 
             var clientsInList = _context.tblMailingListClients.Where(c => c.tblMailingListId == id).Select(c=>c.tblPharmacistId);
 
-            var clients = from c in _context.tblPharmacists.Include(t => t.Client)
+            var clients = from c in _context.tblPharmacists.Include(t => t.ApplicationUser)
                           where !(clientsInList.Contains(c.Id))
                           select c;
 
             ViewBag.Clients = clients;
 
             var tblMailingList = await _context.tblMailingList
-                .Include(t => t.tblMailingListClients).ThenInclude(c=>c.tblPharmacist).ThenInclude(c=>c.Client)
+                .Include(t => t.tblMailingListClients).ThenInclude(c=>c.tblPharmacist).ThenInclude(c=>c.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tblMailingList == null)
             {

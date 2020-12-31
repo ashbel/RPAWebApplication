@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RpaData.DataContext;
 using RpaData.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -25,26 +26,20 @@ namespace RpaApis.Controllers
 
         // GET: api/tblEvents
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<tblEvents>>> GettblEvents()
+        public async Task<ActionResult<IEnumerable<tblEventsHistory>>> GettblEvents()
         {
             
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var clientId = identity.FindFirst("UserId").Value;
-            var events = await _context.tblEvents.ToListAsync();
-
-            foreach(var item in events.ToList())
-            {
-                item.tblEventsHistory = _context.tblEventsHistory.Where(c => c.ClientId == clientId && c.EventId == item.Id).ToList();
-            }
-
+            var clientId = Convert.ToInt32(User.FindFirst("ClientId").Value);
+            var events = await _context.tblEventsHistory.Include(t=>t.Event).Where(c => c.tblPharmacistsId == clientId).ToListAsync();
             return events;
         }
 
         // GET: api/tblEvents/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<tblEvents>> GettblEvents(int id)
+        public async Task<ActionResult<tblEventsHistory>> GettblEvents(int id)
         {
-            var tblEvents = await _context.tblEvents.FindAsync(id);
+            var tblEvents = await _context.tblEventsHistory.Include(t=>t.Event).FirstOrDefaultAsync(c=>c.Id == id);
 
             if (tblEvents == null)
             {
@@ -58,7 +53,7 @@ namespace RpaApis.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PuttblEvents(int id, tblEvents tblEvents)
+        public async Task<IActionResult> PuttblEvents(int id, tblEventsHistory tblEvents)
         {
             if (id != tblEvents.Id)
             {

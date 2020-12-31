@@ -27,9 +27,16 @@ namespace RpaUi.Areas.Client.Controllers
         // GET: Client/Invoices
         public async Task<IActionResult> Index()
         {
-            var clientId = User.FindFirst("ClientId").Value;
-            var applicationDbContext = _context.tblInvoices.Include(t => t.InvoiceType).Include(t=>t.tblPayments);
-            var payments = _context.tblPayments.Include(t => t.Invoice).Where(c => c.ClientId == clientId);
+            var clientId = Convert.ToInt32(User.FindFirst("ClientId").Value);
+            int Id = Convert.ToInt32(clientId);
+            var applicationDbContext = _context.tblInvoiceClient
+                                        .Include(t => t.tblInvoices)
+                                        .ThenInclude(t => t.InvoiceType)
+                                        .Include(t => t.tblInvoices)
+                                        .ThenInclude(t=>t.tblPayments)
+                                        .Where(c=>c.tblPharmacistsId == Id);
+
+            var payments = _context.tblPayments.Include(t => t.Invoice).Where(c => c.tblPharmacistsId== clientId);
             ViewBag.Payments = payments;
             return View(await applicationDbContext.ToListAsync());
         }
@@ -42,9 +49,11 @@ namespace RpaUi.Areas.Client.Controllers
                 return NotFound();
             }
 
-            var tblInvoices = await _context.tblInvoices
-                .Include(t => t.tblPayments)
-                .Include(t => t.InvoiceType)
+            var tblInvoices = await _context.tblInvoiceClient
+                                        .Include(t => t.tblInvoices)
+                                        .ThenInclude(t => t.InvoiceType)
+                                        .Include(t => t.tblInvoices)
+                                        .ThenInclude(t => t.tblPayments)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tblInvoices == null)
             {
@@ -192,7 +201,7 @@ namespace RpaUi.Areas.Client.Controllers
 
             tblPayments payments = new tblPayments();
             payments.AmountPaid = Convert.ToDecimal(amountPaid);
-            payments.ClientId = User.FindFirst("UserId").Value;
+            payments.tblPharmacistsId = Convert.ToInt32(User.FindFirst("ClientId").Value);
             payments.PayDate = Convert.ToDateTime(paymentDate);
             payments.PaymentComment = paymentDetails;
             payments.Created = DateTime.Now;

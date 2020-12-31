@@ -24,7 +24,7 @@ namespace RpaUi.Controllers
         // GET: Certificates
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.tblCertificates.Include(t => t.Client).Include(t => t.Event);
+            var applicationDbContext = _context.tblCertificates.Include(t => t.tblPharmacists).Include(t => t.Event);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -37,7 +37,7 @@ namespace RpaUi.Controllers
             }
 
             var tblCertificates = await _context.tblCertificates
-                .Include(t => t.Client)
+                .Include(t => t.tblPharmacists)
                 .Include(t => t.Event)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tblCertificates == null)
@@ -51,7 +51,7 @@ namespace RpaUi.Controllers
         // GET: Certificates/Create
         public IActionResult Create()
         {
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "FullName");
+            ViewData["tblPharmacistsId"] = new SelectList(_context.Users, "Id", "FullName");
             ViewData["EventId"] = new SelectList(_context.tblEvents, "Id", "EventName");
             return View();
         }
@@ -61,7 +61,7 @@ namespace RpaUi.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientId,EventId,EventPoints,CertificateDate,Id")] tblCertificates tblCertificates)
+        public async Task<IActionResult> Create([Bind("tblPharmacistsId,EventId,EventPoints,CertificateDate,Id")] tblCertificates tblCertificates)
         {
             var local_time = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("South Africa Standard Time"));
             tblCertificates.Created = local_time;
@@ -72,7 +72,7 @@ namespace RpaUi.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "FullName", tblCertificates.ClientId);
+            ViewData["tblPharmacistsId"] = new SelectList(_context.tblPharmacists, "Id", "FullName", tblCertificates.tblPharmacistsId);
             ViewData["EventId"] = new SelectList(_context.tblEvents, "Id", "EventName", tblCertificates.EventId);
             return View(tblCertificates);
         }
@@ -90,7 +90,7 @@ namespace RpaUi.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "FullName", tblCertificates.ClientId);
+            ViewData["tblPharmacistsId"] = new SelectList(_context.Users, "Id", "FullName", tblCertificates.tblPharmacistsId);
             ViewData["EventId"] = new SelectList(_context.tblEvents, "Id", "EventName", tblCertificates.EventId);
             return View(tblCertificates);
         }
@@ -100,7 +100,7 @@ namespace RpaUi.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientId,EventId,EventPoints,CertificateDate,Id,Created")] tblCertificates tblCertificates)
+        public async Task<IActionResult> Edit(int id, [Bind("tblPharmacistsId,EventId,EventPoints,CertificateDate,Id,Created")] tblCertificates tblCertificates)
         {
             if (id != tblCertificates.Id)
             {
@@ -127,7 +127,7 @@ namespace RpaUi.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "FullName", tblCertificates.ClientId);
+            ViewData["tblPharmacistsId"] = new SelectList(_context.Users, "Id", "FullName", tblCertificates.tblPharmacistsId);
             ViewData["EventId"] = new SelectList(_context.tblEvents, "Id", "EventName", tblCertificates.EventId);
             return View(tblCertificates);
         }
@@ -141,7 +141,7 @@ namespace RpaUi.Controllers
             }
 
             var tblCertificates = await _context.tblCertificates
-                .Include(t => t.Client)
+                .Include(t => t.tblPharmacists)
                 .Include(t => t.Event)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tblCertificates == null)

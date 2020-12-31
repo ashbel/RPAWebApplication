@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RpaData.DataContext;
 using RpaData.Models;
+using RpaData.Models.ViewModels;
+using RpaUi.Interfaces;
 using RpaUi.Services;
 
 namespace RpaUi.Controllers
@@ -47,9 +49,12 @@ namespace RpaUi.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["Memberships"] = _context.tblMembership;
             var tblInvoices = await _context.tblInvoices
                 .Include(t => t.InvoiceType)
+                .Include(t=> t.tblInvoiceClients)
+                .ThenInclude(t=>t.tblPharmacists)
+                .ThenInclude(t=>t.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tblInvoices == null)
             {
@@ -208,21 +213,57 @@ namespace RpaUi.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult SendEmail(int id)
+        [HttpPost]
+        public async Task<IActionResult> SendAsync(int id)
         {
+            string[] membershipIds = Request.Form["memberships"].ToArray();
+            List<string> finalMembers = new List<string>();
 
-            BackgroundJob.Enqueue(() => SendEmailJobAsync(id));
+            foreach(var item in membershipIds)
+            {
+                int _id = Convert.ToInt32(item);
+                var members = _context.tblMembershipClients.Where(c => c.tblMembershipId == _id);
+
+                foreach(var member in members.ToList())
+                {
+                    tblInvoicesClient tblInvoiceClient = new tblInvoicesClient();
+                    tblInvoiceClient.Created = DateTime.Now;
+                    tblInvoiceClient.paid = false;
+                    tblInvoiceClient.tblInvoicesId = id;
+                    tblInvoiceClient.tblPharmacistsId = member.tblPharmacistsId;
+                    if ((_context.tblInvoiceClient.Where(c => c.tblInvoicesId == id && c.tblPharmacistsId == member.tblPharmacistsId)).Count() == 0)
+                    {
+                        finalMembers.Add(item);
+                        _context.Add(tblInvoiceClient);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+            }
+
+            BackgroundJob.Enqueue(() => SendEmailJobAsync(id, finalMembers));
 
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task SendEmailJobAsync(int id)
+        public async Task SendEmailJobAsync(int id, List<string> memberslist = null)
         {
             var tblInvoice = await _context.tblInvoices.FirstOrDefaultAsync(m => m.Id == id);
 
             List<ApplicationUser> members = new List<ApplicationUser>();
             List<ApplicationUser> nonMembers = new List<ApplicationUser>();
-            
+
+
+            foreach (var member in memberslist)
+            {
+                var memberId = Convert.ToInt32(memberslist);
+                var tblmailinglist = _context.tblMembership.Include(c => c.tblMembershipClients).ThenInclude(c => c.tblPharmacists).SingleOrDefault(x => x.Id == memberId);
+
+                foreach (var mailinglistClient in tblmailinglist.tblMembershipClients)
+                {
+                    ApplicationUser applicationUser = await userManager.FindByIdAsync(mailinglistClient.tblPharmacists.ApplicationUserId);
+                    members.Add(applicationUser);
+                }
+            }
 
             foreach (var user in userManager.Users.ToList())
             {

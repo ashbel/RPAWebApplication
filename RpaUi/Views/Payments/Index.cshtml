@@ -43,7 +43,7 @@
                                 @Html.DisplayNameFor(model => model.PayDate)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Client)
+                                @Html.DisplayNameFor(model => model.tblPharmacistsId)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.PaymentStatus)
@@ -66,7 +66,7 @@
                                     @Html.DisplayFor(modelItem => item.PayDate)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Client.FullName)
+                                    @Html.DisplayFor(modelItem => item.tblPharmacists.ApplicationUser.FullName)
                                 </td>
                                 <td>
                                     @(item.PaymentStatus?"Paid":"Submitted")

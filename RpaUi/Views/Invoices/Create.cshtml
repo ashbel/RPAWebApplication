@@ -5,54 +5,67 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <h1>@ViewData["Title"]</h1>
-<div class="card ">
-    <div class="card-header">
-        <h4>Create</h4>
-    </div>
-    <div class="card-body">
-        <hr />
-        <div class="row">
-            <div class="col-md-4">
-                <form asp-action="Create"  enctype="multipart/form-data">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="Amount" class="control-label"></label>
-                        <input asp-for="Amount" class="form-control" />
-                        <span asp-validation-for="Amount" class="text-danger"></span>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h2 class="m-0 text-dark">@ViewData["Title"]</h2>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="card ">
+            <div class="card-header">
+                <h4>Create</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <form asp-action="Create" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Amount" class="control-label"></label>
+                                <input asp-for="Amount" class="form-control" />
+                                <span asp-validation-for="Amount" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="InvoiceTypeId" class="control-label"></label>
+                                <select asp-for="InvoiceTypeId" class="form-control" asp-items="ViewBag.InvoiceTypeId"></select>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DueDate" class="control-label"></label>
+                                <input asp-for="DueDate" class="form-control" />
+                                <span asp-validation-for="DueDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="InvoiceComment" class="control-label"></label>
+                                <textarea asp-for="InvoiceComment" class="form-control" rows="6"></textarea>
+                                <span asp-validation-for="InvoiceComment" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="invoiceAttachment" class="control-label"></label>
+                                <input asp-for="invoiceAttachment" class="form-control" type="file" />
+                                <span asp-validation-for="invoiceAttachment" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Create" class="btn btn-primary" />
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="InvoiceTypeId" class="control-label"></label>
-                        <select asp-for="InvoiceTypeId" class="form-control" asp-items="ViewBag.InvoiceTypeId"></select>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="DueDate" class="control-label"></label>
-                        <input asp-for="DueDate" class="form-control" />
-                        <span asp-validation-for="DueDate" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="InvoiceComment" class="control-label"></label>
-                        <textarea asp-for="InvoiceComment" class="form-control" rows="6"></textarea>
-                        <span asp-validation-for="InvoiceComment" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="invoiceAttachment" class="control-label"></label>
-                        <input asp-for="invoiceAttachment" class="form-control" type="file"/>
-                        <span asp-validation-for="invoiceAttachment" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Create" class="btn btn-primary" />
-                    </div>
-                </form>
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <div>
+                    <a asp-action="Index">Back to List</a>
+                </div>
+
             </div>
         </div>
-
     </div>
-    <div class="card-footer">
-        <div>
-            <a asp-action="Index">Back to List</a>
-        </div>
-
-    </div>
-</div>
-
+</section>

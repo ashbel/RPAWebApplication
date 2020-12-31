@@ -34,12 +34,12 @@ namespace RpaUi.Areas.Client.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id", tblPharmacists.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id", tblPharmacists.ApplicationUserId);
             ViewData["tblPharmacyid"] = new SelectList(_context.tblPharmacies, "id", "pharmacyName", tblPharmacists.tblPharmacyid);
             var ProfileViewModel = new ProfileViewModel {
                 Id = tblPharmacists.Id,
                 Created = tblPharmacists.Created,
-                ClientId = tblPharmacists.ClientId,
+                ClientId = tblPharmacists.ApplicationUserId,
                 tblPharmacyid = tblPharmacists.tblPharmacyid,
                 profileComplete = tblPharmacists.profileComplete,
                 qualifications = tblPharmacists.qualifications,
@@ -74,7 +74,7 @@ namespace RpaUi.Areas.Client.Controllers
                 {
                     Id = tblPharmacists.Id,
                     Created = tblPharmacists.Created,
-                    ClientId = tblPharmacists.ClientId,
+                    ApplicationUserId = tblPharmacists.ClientId,
                     tblPharmacyid = tblPharmacists.tblPharmacyid,
                     profileComplete = tblPharmacists.profileComplete,
                     qualifications = tblPharmacists.qualifications,
@@ -121,7 +121,7 @@ namespace RpaUi.Areas.Client.Controllers
             }
 
             var tblPharmacists = await _context.tblPharmacists
-                .Include(t => t.Client)
+                .Include(t => t.ApplicationUser)
                 .Include(t => t.tblPharmacy)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tblPharmacists == null)
@@ -153,7 +153,7 @@ namespace RpaUi.Areas.Client.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id", tblPharmacists.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id", tblPharmacists.ApplicationUserId);
             ViewData["tblPharmacyid"] = new SelectList(_context.tblPharmacies, "id", "pharmacyAddress", tblPharmacists.tblPharmacyid);
             return View(tblPharmacists);
         }
@@ -171,7 +171,7 @@ namespace RpaUi.Areas.Client.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id", tblPharmacists.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id", tblPharmacists.ApplicationUserId);
             ViewData["tblPharmacyid"] = new SelectList(_context.tblPharmacies, "id", "pharmacyAddress", tblPharmacists.tblPharmacyid);
             return View(tblPharmacists);
         }
@@ -209,7 +209,7 @@ namespace RpaUi.Areas.Client.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id", tblPharmacists.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id", tblPharmacists.ApplicationUserId);
             ViewData["tblPharmacyid"] = new SelectList(_context.tblPharmacies, "id", "pharmacyAddress", tblPharmacists.tblPharmacyid);
             return View(tblPharmacists);
         }
@@ -223,7 +223,7 @@ namespace RpaUi.Areas.Client.Controllers
             }
 
             var tblPharmacists = await _context.tblPharmacists
-                .Include(t => t.Client)
+                .Include(t => t.ApplicationUser)
                 .Include(t => t.tblPharmacy)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tblPharmacists == null)

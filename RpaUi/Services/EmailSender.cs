@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using RpaUi.Interfaces;
 
 namespace RpaUi.Services
 {
@@ -20,10 +21,10 @@ namespace RpaUi.Services
             _context = context;
         }
 
-        public async Task SendEmailWithAttachmentAsync(string email, string subject, string htmlMessage, string attachment = "")
+        public async Task SendEmailWithAttachmentAsync(string email, string subject, string htmlMessage, string attachment = "", string filename = "")
         {
             //BackgroundJob.Enqueue(() => SendEmail(email, subject,htmlMessage));
-            await SendEmail(email, subject, htmlMessage, attachment);
+            await SendEmail(email, subject, htmlMessage, attachment, filename);
         }
 
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
@@ -32,7 +33,7 @@ namespace RpaUi.Services
             await SendEmail(email, subject, htmlMessage);
         }
 
-        public async Task SendEmail(string email, string subject, string htmlMessage, string htmlAttachment = "")
+        public async Task SendEmail(string email, string subject, string htmlMessage, string htmlAttachment = "", string filename="")
         {
             var email_config = _context.tblEmails.FirstOrDefault();
 
@@ -49,6 +50,12 @@ namespace RpaUi.Services
             if (!String.IsNullOrEmpty(htmlAttachment))
             {
                 var attachment = new Attachment(uploadPath + "/" + htmlAttachment);
+
+                if (!string.IsNullOrEmpty(filename))
+                {
+                    attachment.Name = filename;
+                }
+                
                 emailMessage.Attachments.Add(attachment);
             }
 

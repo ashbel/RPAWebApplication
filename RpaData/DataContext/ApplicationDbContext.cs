@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RpaData.Models;
+using RpaData.Models.ViewModels;
 
 namespace RpaData.DataContext
 {
@@ -25,6 +26,11 @@ namespace RpaData.DataContext
         public virtual DbSet<tblMailingList> tblMailingList { get; set; }
         public virtual DbSet<tblMailingListClients> tblMailingListClients { get; set; }
         public virtual DbSet<tblJobs> tblJobs { get; set; }
+        public virtual DbSet<tblInvoicesClient> tblInvoiceClient { get; set; }
+        public virtual DbSet<tblMembership> tblMembership { get; set; }
+        public virtual DbSet<tblMembershipClient> tblMembershipClients { get; set; }
+        public virtual DbSet<tblResourcesCategory> tblResourceCategory { get; set; }
+        public virtual DbSet<tblResourcesMember> tblResourcesMembers { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : base(options)

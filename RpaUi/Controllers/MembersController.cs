@@ -15,17 +15,18 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using RpaData.DataContext;
 using RpaData.Models;
+using RpaUi.Interfaces;
 using RpaUi.Services;
 
 namespace RpaUi.Controllers
 {
     [Authorize]
-    public class ClientsController : Controller
+    public class MembersController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IMyEmailSender _emailSender;
         private readonly UserManager<ApplicationUser> _userManager;
-        public ClientsController(UserManager<ApplicationUser> userManager, IMyEmailSender emailSender, ApplicationDbContext context)
+        public MembersController(UserManager<ApplicationUser> userManager, IMyEmailSender emailSender, ApplicationDbContext context)
         {
             _context = context;
             _emailSender = emailSender;
@@ -35,7 +36,11 @@ namespace RpaUi.Controllers
         // GET: Clients
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.tblPharmacists.Include(t => t.Client).Include(t => t.tblPharmacy);
+            var applicationDbContext = _context.tblPharmacists.Include(t => t.ApplicationUser)
+                                        .Include(t => t.tblPharmacy)
+                                        .Include(t => t.tblMailingListClients).ThenInclude(c => c.tblMailingList)
+                                        .Include(t => t.tblMembershipClients).ThenInclude(c => c.tblMembership)
+                                        .Include(t => t.tblInvoiceClients).ThenInclude(c => c.tblInvoices).ThenInclude(c=>c.InvoiceType);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -48,9 +53,15 @@ namespace RpaUi.Controllers
             }
 
             var tblPharmacists = await _context.tblPharmacists
-                .Include(t => t.Client)
+                .Include(t => t.ApplicationUser)
                 .Include(t => t.tblPharmacy)
+                .Include(t => t.tblMailingListClients).ThenInclude(c => c.tblMailingList)
+                .Include(t => t.tblMembershipClients).ThenInclude(c => c.tblMembership)
+                .Include(t => t.tblInvoiceClients).ThenInclude(c => c.tblInvoices)
+                .ThenInclude(c => c.InvoiceType)
+                .Include(t => t.tblEventsHistory).ThenInclude(c => c.Event)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (tblPharmacists == null)
             {
                 return NotFound();
@@ -82,7 +93,7 @@ namespace RpaUi.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "FullName", tblPharmacists.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "FullName", tblPharmacists.ApplicationUserId);
             ViewData["tblPharmacyid"] = new SelectList(_context.tblPharmacies, "id", "pharmacyName", tblPharmacists.tblPharmacyid);
             return View(tblPharmacists);
         }
@@ -100,7 +111,7 @@ namespace RpaUi.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "FullName", tblPharmacists.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "FullName", tblPharmacists.ApplicationUserId);
             ViewData["tblPharmacyid"] = new SelectList(_context.tblPharmacies, "id", "pharmacyName", tblPharmacists.tblPharmacyid);
             return View(tblPharmacists);
         }
@@ -137,7 +148,7 @@ namespace RpaUi.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "FullName", tblPharmacists.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "FullName", tblPharmacists.ApplicationUserId);
             ViewData["tblPharmacyid"] = new SelectList(_context.tblPharmacies, "id", "pharmacyName", tblPharmacists.tblPharmacyid);
             return View(tblPharmacists);
         }
@@ -151,7 +162,7 @@ namespace RpaUi.Controllers
             }
 
             var tblPharmacists = await _context.tblPharmacists
-                .Include(t => t.Client)
+                .Include(t => t.ApplicationUser)
                 .Include(t => t.tblPharmacy)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tblPharmacists == null)
@@ -176,28 +187,61 @@ namespace RpaUi.Controllers
         public async Task<IActionResult> Confirm(int id, bool act)
         {
             var local_time = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("South Africa Standard Time"));
-            var tblPharmacists = await _context.tblPharmacists.Include(c=>c.Client).FirstOrDefaultAsync(c=>c.Id == id);
+            var tblPharmacists = await _context.tblPharmacists.Include(c=>c.ApplicationUser).FirstOrDefaultAsync(c=>c.Id == id);
             tblPharmacists.status = act;
             string returnUrl = null;
-            
+
 
             try
             {
                 if (act)
                 {
                     tblPharmacists.dateOfRenewal = local_time.AddYears(1);
-                    var user = await _userManager.FindByNameAsync(tblPharmacists.Client.UserName);
+                    var user = await _userManager.FindByNameAsync(tblPharmacists.ApplicationUser.UserName);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
                     var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
+                                                "/Account/ConfirmEmail",
+                                                pageHandler: null,
+                                                values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
+                                                protocol: Request.Scheme);
 
-                    BackgroundJob.Enqueue(() => SendEmailJobAsync(user,callbackUrl));
-                } 
+                    var subject = "Confirm your email";
+                    var emailBody = $"<p> Dear <b>" + user.FullName + $"</b> </p>  Your Account has been approved. </br> Please confirm your account by" +
+                                        $" <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
+                    BackgroundJob.Enqueue(() => SendEmailJobAsync(user, subject, emailBody));
+
+                    if ((_context.tblMailingListClients.Where(c => c.tblPharmacistId == id)).Count() == 0)
+                    {
+                        tblMailingListClients tblMailingListClients = new tblMailingListClients();
+                        tblMailingListClients.tblMailingListId = _context.tblMailingList.FirstOrDefault(c => c.ListName == "All Members").Id;
+                        tblMailingListClients.tblPharmacistId = id;
+                        tblMailingListClients.Created = DateTime.Now;
+                        _context.Add(tblMailingListClients);
+                    }
+
+                    if ((_context.tblMembershipClients.Where(c => c.tblPharmacistsId == id)).Count() == 0)
+                    {
+                        tblMembershipClient tblMembershipClient = new tblMembershipClient();
+                        tblMembershipClient.tblMembershipId = _context.tblMembership.FirstOrDefault(c => c.name == "Default Membership").Id;
+                        tblMembershipClient.tblPharmacistsId = id;
+                        tblMembershipClient.Created = DateTime.Now;
+                        _context.Add(tblMembershipClient);
+                    }
+
+                }
+                else
+                {
+                    tblPharmacists.dateOfRenewal = local_time.AddYears(1);
+                    var user = await _userManager.FindByNameAsync(tblPharmacists.ApplicationUser.UserName);
+                    user.EmailConfirmed = false;
+                    await _userManager.UpdateAsync(user);
+
+                    var subject = "Account Declined/Suspended";
+                    var emailBody = $"<p> Dear <b>" + user.FullName + $"</b> </p>  Your Account has been declined/suspended. </br> If you think this was done in error please email secretary@rpa.co.zw";
+                    BackgroundJob.Enqueue(() => SendEmailJobAsync(user, subject, emailBody));
+                }
+            
 
                 _context.Update(tblPharmacists);
                 await _context.SaveChangesAsync();
@@ -216,12 +260,10 @@ namespace RpaUi.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task SendEmailJobAsync(ApplicationUser user, string callbackUrl)
+        public async Task SendEmailJobAsync(ApplicationUser user, string subject,string body)
         {
             
-            await _emailSender.SendEmailAsync(user.Email, "Confirm your email",
-                                        $"<p> Dear <b>" + user.FullName + $"</b> </p>  Your Account has been approved. </br> Please confirm your account by" +
-                                        $" <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            await _emailSender.SendEmailAsync(user.Email, subject, body);
         }
 
         private bool tblPharmacistsExists(int id)

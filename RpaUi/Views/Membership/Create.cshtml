@@ -1,0 +1,56 @@
+﻿@model RpaData.Models.tblMembership
+
+@{
+    ViewData["Title"] = "Membership";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h2 class="m-0 text-dark">@ViewData["Title"]</h2>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="card">
+            <div class="card-header">
+                <h4>Create</h4>
+            </div>
+            <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <form asp-action="Create">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="form-group">
+                                        <label asp-for="name" class="control-label"></label>
+                                        <input asp-for="name" class="form-control" />
+                                        <span asp-validation-for="name" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="description" class="control-label"></label>
+                                        <textarea asp-for="description" class="form-control" rows="10" ></textarea>
+                                        <span asp-validation-for="description" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" value="Create" class="btn btn-primary" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+            </div>
+                        <div class="card-footer">
+                            <a asp-action="Index">Back to List</a>
+                        </div>
+
+        </div>
+    </div>
+</section>

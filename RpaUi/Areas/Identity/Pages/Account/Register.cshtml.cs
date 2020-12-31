@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using RpaData.DataContext;
 using RpaData.Models;
+using RpaUi.Interfaces;
 using RpaUi.Services;
 
 namespace RpaUi.Areas.Identity.Pages.Account
@@ -106,13 +107,13 @@ namespace RpaUi.Areas.Identity.Pages.Account
             [Display(Name = "Work Address")]
             public string workAddress { get; set; }
 
-            [Required]
+            //[Required]
             [Display(Name = "Qualifications (Tick all that apply)")]
             public string qualifications { get; set; }
 
             [Required]
             [Display(Name = "Years in practice post pre-registration qualification ")]
-            public string yearsInPractice { get; set; }
+            public int yearsInPractice { get; set; }
 
             [Required]
             [Display(Name = "When did you join RPA")]
@@ -121,7 +122,7 @@ namespace RpaUi.Areas.Identity.Pages.Account
 
 
             [Required]
-            [Display(Name = "Are you in good standing with Pharmacists Council of Zimbabwe ")]
+            [Display(Name = "Are you in good standing with Pharmacists Council of Zimbabwe")]
             public bool goodStandingPCZ { get; set; }
 
             [StringLength(500)]
@@ -129,13 +130,17 @@ namespace RpaUi.Areas.Identity.Pages.Account
             public string goodStandingReasonPCZ { get; set; }
 
             [Required]
-            [Display(Name = "Are you in good standing with Pharmacists Council of Zimbabwe")]
+            [Display(Name = "Are you in good standing with the Medicines Control Authority of Zimbabwe")]
             public bool goodStandingMCAZ { get; set; }
 
 
             [StringLength(500)]
             [Display(Name = "If no, kindly explain")]
             public string goodStandingReasonMCAZ { get; set; }
+
+            [StringLength(500)]
+            [Display(Name = "Other Qualifications")]
+            public string otherQualification { get; set; }
 
             public bool profileComplete { get; set; }
         }
@@ -144,7 +149,7 @@ namespace RpaUi.Areas.Identity.Pages.Account
         {
 
             ViewData["Qualification"] = _context.tblQualifications;
-            ViewData["PharmacyId"] = new SelectList(_context.tblPharmacies, "id", "pharmacyName");
+            ViewData["PharmacyId"] = new SelectList(_context.tblPharmacies.OrderBy(c=>c.pharmacyName), "id", "pharmacyName");
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -166,7 +171,7 @@ namespace RpaUi.Areas.Identity.Pages.Account
                     var role = await _userManager.AddToRoleAsync(user, "Client");
                     //create Client
                     tblPharmacists tblPharmacist = new tblPharmacists();
-                    tblPharmacist.ClientId = user.Id;
+                    tblPharmacist.ApplicationUserId = user.Id;
                     tblPharmacist.tblPharmacyid = Input.PharmacyId;
                     tblPharmacist.profileComplete = false;
                     tblPharmacist.Created = DateTime.Now;
@@ -176,7 +181,7 @@ namespace RpaUi.Areas.Identity.Pages.Account
                     tblPharmacist.goodStandingReasonMCAZ = Input.goodStandingReasonMCAZ;
                     tblPharmacist.goodStandingReasonPCZ = Input.goodStandingReasonPCZ;
                     tblPharmacist.dateOfJoiningRPA = Input.dateOfJoiningRPA;
-                    tblPharmacist.yearsInPractice = Input.yearsInPractice;
+                    tblPharmacist.yearsInPractice = Input.yearsInPractice.ToString();
                     tblPharmacist.status = false;
                     //save 
                     _context.Add(tblPharmacist);
@@ -197,31 +202,11 @@ namespace RpaUi.Areas.Identity.Pages.Account
                             await _context.SaveChangesAsync();
                         }
                     }
-                    //int[] myInts = Array.ConvertAll(arr, s => Convert.ToInt32(s));
-
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
-                    //var callbackUrl = Url.Page(
-                    //    "/Account/ConfirmEmail",
-                    //    pageHandler: null,
-                    //    values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
-                    //    protocol: Request.Scheme);
 
                     BackgroundJob.Enqueue(() => SendEmailJobAsync(user));
 
-                    //await _emailSender.SendEmailAsync(Input.Email,  "Confirm your email",
-                    //    $"<p> Dear <b>" + user.FullName +  $"</b> </p>  Thank you for registering. </br> Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                    //if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    //{
-                    //    return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    //}
-                    //else
-                    //{
                     await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
-                    //}
                 }
                 
                 foreach (var error in result.Errors)
@@ -229,15 +214,15 @@ namespace RpaUi.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+            Input.qualifications = Request.Form["Input.qualifications"].ToString();
             ViewData["Qualification"] = _context.tblQualifications;
-            ViewData["PharmacyId"] = new SelectList(_context.tblPharmacies, "id", "pharmacyName");
-            // If we got this far, something failed, redisplay form
+            ViewData["PharmacyId"] = new SelectList(_context.tblPharmacies.OrderBy(c => c.pharmacyName), "id", "pharmacyName");
             return Page();
         }
 
         public async Task SendEmailJobAsync(ApplicationUser user)
         {
-            await _emailSender.SendEmailAsync(user.Email, "Rpa Registration",
+            await _emailSender.SendEmailAsync(user.Email, "RPA Registration",
                         $"<p> Dear <b>" + user.FullName + $"</b> </p>  Thank you for registering. <p> We are reviewing your application and we will get back to you via email soon" +
                         $".</p>");
         }

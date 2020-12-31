@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +9,10 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using RpaData.Models;
+using RpaData.Models.ViewModels;
 
 namespace RpaUi.Controllers
 {
@@ -33,10 +38,22 @@ namespace RpaUi.Controllers
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
+            var users = userManager.Users;
+            var userslist = new List<UserViewModel>();
+            foreach(var user in users.ToList())
+            {
+                UserViewModel userViewModel = new UserViewModel();
+                userViewModel.FullName = user.FullName;
+                userViewModel.UserName = user.UserName;
+                userViewModel.Email = user.Email;
+                userViewModel.Id = user.Id;
+                userViewModel.Roles = string.Join(",", userManager.GetRolesAsync(user).Result);
 
-            return View(userManager.Users);
+                userslist.Add(userViewModel);
+            };
+            return View(userslist);
         }
 
         public ViewResult Create() {
@@ -60,7 +77,8 @@ namespace RpaUi.Controllers
                     PhoneNumber = user.PhoneNumber, 
                     LastName = user.lastName,
                     FullName = user.firstName + " "+user.lastName,
-                    RpaNumber = user.RpaNumber
+                    RpaNumber = user.RpaNumber,
+                    EmailConfirmed = true,
                 };
 
                 IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
@@ -68,17 +86,17 @@ namespace RpaUi.Controllers
                 {
                     //Add Users To Role
                     var role = await userManager.AddToRoleAsync(appUser, user.Roles);
-                    var code = await userManager.GenerateEmailConfirmationTokenAsync(appUser);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    //var code = await userManager.GenerateEmailConfirmationTokenAsync(appUser);
+                   // code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = appUser.Id, code = code, returnUrl = "" },
-                        protocol: Request.Scheme);
+                    //var callbackUrl = Url.Page(
+                    //    "/Account/ConfirmEmail",
+                    //    pageHandler: null,
+                    //    values: new { area = "Identity", userId = appUser.Id, code = code, returnUrl = "" },
+                    //    protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(appUser.Email, "Confirm your email",
-                        $"<p> Dear <b>" + appUser.FullName + $"</b> </p>  An account has been created for you.</br> Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    await _emailSender.SendEmailAsync(appUser.Email, "Account Created",
+                        $"<p> Dear <b>" + appUser.FullName + $"</b> </p>  An account has been created for you.");
 
                     return RedirectToAction("Index");
 
@@ -89,6 +107,7 @@ namespace RpaUi.Controllers
                         ModelState.AddModelError("", error.Description);
                 }
             }
+            ViewData["Roles"] = new SelectList(roleManager.Roles, "Name", "Name", user.Roles);
             return View(user);
         }
 

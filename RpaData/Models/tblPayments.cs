@@ -9,7 +9,7 @@ namespace RpaData.Models
     {
         [Required]
         [Display(Name = "Client")]
-        public string ClientId { get; set; }
+        public int tblPharmacistsId { get; set; }
 
         [Required]
         [Display(Name = "Amount Paid")]
@@ -37,9 +37,8 @@ namespace RpaData.Models
         [DisplayName("Payment Status")]
         public bool PaymentStatus { get; set; }
 
-        public ApplicationUser Client { get; set; }
+        public tblPharmacists tblPharmacists { get; set; }
         public tblCodes PaymentType { get; set; }
-
         public tblInvoices Invoice { get; set; }
     }
 }

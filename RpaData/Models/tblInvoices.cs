@@ -1,4 +1,5 @@
 ﻿using RpaData.Interfaces;
+using RpaData.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,6 +13,7 @@ namespace RpaData.Models
         public tblInvoices()
         {
             tblPayments = new HashSet<tblPayments>();
+            tblInvoiceClients = new HashSet<tblInvoicesClient>();
         }
 
 
@@ -21,7 +23,7 @@ namespace RpaData.Models
         public decimal Amount { get; set; }
 
         [Required]
-        [Display(Name = "Invoice Type")]
+        [Display(Name = "Invoice")]
         public int InvoiceTypeId { get; set; }
 
         [Required]
@@ -34,8 +36,11 @@ namespace RpaData.Models
 
         [DisplayName("Attachment")]
         public string invoiceAttachment { get; set; }
+
+        [Display(Name = "Invoice")]
         public tblCodes InvoiceType { get; set; }
 
         public virtual ICollection<tblPayments> tblPayments { get; set; }
+        public virtual ICollection<tblInvoicesClient> tblInvoiceClients { get; set; }
     }
 }

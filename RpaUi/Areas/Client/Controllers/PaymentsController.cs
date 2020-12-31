@@ -26,8 +26,8 @@ namespace RpaUi.Areas.Client.Controllers
         // GET: Client/Payments
         public async Task<IActionResult> Index()
         {
-            var userId = User.FindFirst("UserId").Value;
-            var applicationDbContext = _context.tblPayments.Where(c => c.ClientId == userId).Include(t => t.Client).Include(t => t.PaymentType).Include(t => t.Invoice);
+            var userId = Convert.ToInt32(User.FindFirst("ClientId").Value);
+            var applicationDbContext = _context.tblPayments.Where(c => c.tblPharmacistsId == userId).Include(t => t.tblPharmacists).ThenInclude(c=>c.ApplicationUser).Include(t => t.PaymentType).Include(t => t.Invoice);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -38,12 +38,13 @@ namespace RpaUi.Areas.Client.Controllers
             {
                 return NotFound();
             }
-            var userId = User.FindFirst("UserId").Value;
+            var userId = Convert.ToInt32(User.FindFirst("ClientId").Value);
             var tblPayments = await _context.tblPayments
-                .Include(t => t.Client)
+                .Include(t => t.tblPharmacists)
+                .ThenInclude(c => c.ApplicationUser)
                 .Include(t => t.PaymentType)
                 .Include(t => t.Invoice)
-                .FirstOrDefaultAsync(m => m.Id == id && m.ClientId == userId);
+                .FirstOrDefaultAsync(m => m.Id == id && m.tblPharmacistsId == userId);
             if (tblPayments == null)
             {
                 return NotFound();
@@ -55,7 +56,7 @@ namespace RpaUi.Areas.Client.Controllers
         // GET: Client/Payments/Create
         public IActionResult Create()
         {
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["tblPharmacistsId"] = new SelectList(_context.Users, "Id", "Id");
             ViewData["PaymentTypeId"] = new SelectList(_context.tblCodes, "Id", "Id");
             return View();
         }
@@ -67,7 +68,7 @@ namespace RpaUi.Areas.Client.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AmountPaid,PaymentTypeId,PayDate,PaymentComment,Id")] tblPayments tblPayments)
         {
-            tblPayments.ClientId = User.FindFirst("UserId").Value;
+            tblPayments.tblPharmacistsId = Convert.ToInt32(User.FindFirst("ClientId").Value);
             tblPayments.Created = DateTime.Now;
 
             if (ModelState.IsValid)
@@ -76,7 +77,7 @@ namespace RpaUi.Areas.Client.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id", tblPayments.ClientId);
+            ViewData["tblPharmacistsId"] = new SelectList(_context.Users, "Id", "Id", tblPayments.tblPharmacistsId);
             ViewData["PaymentTypeId"] = new SelectList(_context.tblCodes, "Id", "Id", tblPayments.PaymentTypeId);
             return View(tblPayments);
         }
@@ -94,7 +95,7 @@ namespace RpaUi.Areas.Client.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id", tblPayments.ClientId);
+            ViewData["tblPharmacistsId"] = new SelectList(_context.Users, "Id", "Id", tblPayments.tblPharmacistsId);
             ViewData["PaymentTypeId"] = new SelectList(_context.tblCodes, "Id", "Id", tblPayments.PaymentTypeId);
             return View(tblPayments);
         }
@@ -104,7 +105,7 @@ namespace RpaUi.Areas.Client.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientId,AmountPaid,PaymentTypeId,PayDate,PaymentComment,Id,Created")] tblPayments tblPayments)
+        public async Task<IActionResult> Edit(int id, [Bind("tblPharmacistsId,AmountPaid,PaymentTypeId,PayDate,PaymentComment,Id,Created")] tblPayments tblPayments)
         {
             if (id != tblPayments.Id)
             {
@@ -131,7 +132,7 @@ namespace RpaUi.Areas.Client.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "Id", tblPayments.ClientId);
+            ViewData["tblPharmacistsId"] = new SelectList(_context.Users, "Id", "Id", tblPayments.tblPharmacistsId);
             ViewData["PaymentTypeId"] = new SelectList(_context.tblCodes, "Id", "Id", tblPayments.PaymentTypeId);
             return View(tblPayments);
         }
@@ -145,7 +146,7 @@ namespace RpaUi.Areas.Client.Controllers
             }
 
             var tblPayments = await _context.tblPayments
-                .Include(t => t.Client)
+                .Include(t => t.tblPharmacists)
                 .Include(t => t.PaymentType)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tblPayments == null)

@@ -18,10 +18,12 @@ namespace RpaData.Models
         public string EventName { get; set; }
         [Required]
         [Display(Name = "Start Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy HH:mm:ss}")]
         public DateTime EventStartDate { get; set; }
 
         [Required]
         [Display(Name = "End Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy HH:mm:ss}")]
         public DateTime EventEndDate { get; set; }
 
         [Required]
@@ -35,6 +37,11 @@ namespace RpaData.Models
         [Required]
         [Display(Name = "Description")]
         public string EventDescription { get; set; }
+
+        [Display(Name = "Sponsor")]
+        public string EventSponsor { get; set; }
+
+        public bool EventComplete { get; set; }
 
         public virtual ICollection<tblEventsHistory> tblEventsHistory { get; set; }
 

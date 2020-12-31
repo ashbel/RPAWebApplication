@@ -1,48 +1,64 @@
 ﻿@model RpaData.Models.tblResources
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Resources";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
-<div class="card ">
-    <div class="card-header">
-        <h4>Create</h4>
-    </div>
-    <div class="card-body">
-        <hr />
-        <div class="row">
-            <div class="col-md-4">
-                <form asp-action="Create" enctype="multipart/form-data">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="ResourceName" class="control-label"></label>
-                        <input asp-for="ResourceName" class="form-control" />
-                        <span asp-validation-for="ResourceName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="ResourceDescription" class="control-label"></label>
-                        <textarea  asp-for="ResourceDescription" class="form-control"  rows="10"></textarea>
-                        <span asp-validation-for="ResourceDescription" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="FileName" class="control-label"></label>
-                        <input asp-for="FileName" class="form-control" type="file" />
-                        <span asp-validation-for="FileName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Create" class="btn btn-primary" />
-                    </div>
-                </form>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="card-footer">
-        <a asp-action="Index">Back to List</a>
-    </div>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h2 class="m-0 text-dark">@ViewData["Title"]</h2>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
 </div>
+<!-- /.content-header -->
+<section class="content">
+    <div class="container-fluid">
 
+        <div class="card ">
+            <div class="card-header">
+                <h4>Create Resource</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <form asp-action="Create">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="ResourceName" class="control-label"></label>
+                                <input asp-for="ResourceName" class="form-control" />
+                                <span asp-validation-for="ResourceName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="tblResourceCategoryId" class="control-label"></label>
+                                <select asp-for="tblResourceCategoryId" class="form-control" asp-items="ViewBag.tblResourceCategoryId"></select>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ResourceDescription" class="control-label"></label>
+                                <textarea asp-for="ResourceDescription" class="form-control"  rows="10"></textarea>
+                                <span asp-validation-for="ResourceDescription" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="FileName" class="control-label"></label>
+                                <input type="file" asp-for="FileName" class="form-control" />
+                                <span asp-validation-for="FileName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Create" class="btn btn-primary btn-sm" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+                <div class="card-footer">
+                    <a asp-action="Index">Back to List</a>
+                </div>
+        </div>
+    </div>
+</section>
 

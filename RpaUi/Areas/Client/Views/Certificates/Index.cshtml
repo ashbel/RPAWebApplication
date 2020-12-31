@@ -1,0 +1,73 @@
+﻿@model IEnumerable<RpaData.Models.tblCertificates>
+
+@{
+    ViewData["Title"] = "Certificates";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+
+<div class="content-header">
+    <div class="container">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h2>Certificates</h2>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <table id="example2" class="table table-bordered table-hover">
+                    <thead class="thead-light">
+                    <tr>
+                        <th></th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Event)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.EventPoints)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CertificateDate)
+                        </th>
+
+
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-sm">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td></td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Event.EventName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EventPoints)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CertificateDate)
+                                </td>
+
+
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+
+            </div>
+        </div>
+    </div>
+</section>

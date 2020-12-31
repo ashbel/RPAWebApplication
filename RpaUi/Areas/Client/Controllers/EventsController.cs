@@ -28,21 +28,22 @@ namespace RpaUi.Areas.Client.Controllers
         {
             
             ViewBag.Greeting = "Hello";
-            return View(await _context.tblEvents.Include(t=>t.tblEventsHistory).ToListAsync());
+            var clientId = Convert.ToInt32(User.FindFirst("ClientId").Value);
+            return View(await _context.tblEventsHistory.Include(t=>t.Event).Where(c=>c.tblPharmacistsId == clientId).ToListAsync());
         }
 
         // GET: Client/Events/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            var clientId = User.FindFirst("ClientId").Value;
+            var clientId = Convert.ToInt32(User.FindFirst("ClientId").Value);
             if (id == null)
             {
                 return NotFound();
             }
 
-            var tblEvents = await _context.tblEvents.Include(t => t.tblEventsHistory)
+            var tblEvents = await _context.tblEventsHistory.Include(t=>t.Event)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            var eventAttendance = await _context.tblEventsHistory.AnyAsync(c => c.ClientId == clientId && c.EventId == id);
+            var eventAttendance = await _context.tblEventsHistory.AnyAsync(c => c.tblPharmacistsId == clientId && c.EventId == id);
             if (tblEvents == null)
             {
                 return NotFound();
@@ -156,11 +157,11 @@ namespace RpaUi.Areas.Client.Controllers
         public async Task<IActionResult> Confirm(int id, bool attend)
         {
             var tblEvents = await _context.tblEvents.FindAsync(id);
-            var clientId = User.FindFirst("UserId").Value;
+            var clientId = Convert.ToInt32(User.FindFirst("ClientId").Value);
 
             if (tblEventsHistoryExists(id, clientId))
             {
-                tblEventsHistory tblEventsHistory = await _context.tblEventsHistory.FirstOrDefaultAsync(c => c.ClientId == clientId && c.EventId == id);
+                tblEventsHistory tblEventsHistory = await _context.tblEventsHistory.FirstOrDefaultAsync(c => c.tblPharmacistsId == clientId && c.EventId == id);
                 tblEventsHistory.Attending = attend;
                 _context.Update(tblEventsHistory);
                 await _context.SaveChangesAsync();
@@ -168,7 +169,7 @@ namespace RpaUi.Areas.Client.Controllers
             else
             {
                 tblEventsHistory tblEventsHistory = new tblEventsHistory();
-                tblEventsHistory.ClientId = User.FindFirst("UserId").Value;
+                tblEventsHistory.tblPharmacistsId = clientId;
                 tblEventsHistory.EventId = id;
                 tblEventsHistory.Attending = attend;
                 tblEventsHistory.Created = DateTime.Now;
@@ -186,9 +187,9 @@ namespace RpaUi.Areas.Client.Controllers
             return _context.tblEvents.Any(e => e.Id == id);
         }
 
-        private bool tblEventsHistoryExists(int meetingId, string clientId)
+        private bool tblEventsHistoryExists(int meetingId, int clientId)
         {
-            return _context.tblEventsHistory.Any(e => e.ClientId == clientId && e.EventId == meetingId);
+            return _context.tblEventsHistory.Any(e => e.tblPharmacistsId == clientId && e.EventId == meetingId);
         }
     }
 }
