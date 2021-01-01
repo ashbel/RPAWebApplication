@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace RpaData.Models
 {
@@ -81,6 +82,7 @@ namespace RpaData.Models
         public ApplicationUser ApplicationUser { get; set; }
 
         public virtual ICollection<tblMailingListClients> tblMailingListClients { get; set; }
+        [JsonIgnore]
         public virtual ICollection<tblMembershipClient> tblMembershipClients { get; set; }
         public virtual ICollection<tblInvoicesClient> tblInvoiceClients { get; set; }
         public virtual ICollection<tblEventsHistory> tblEventsHistory { get; set; }

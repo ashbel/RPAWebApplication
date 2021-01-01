@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -14,8 +15,11 @@ using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using RpaUi.Interfaces;
 using RpaUi.Jobs;
+using RpaUi.Utilities;
 
 namespace RpaUi
 {
@@ -92,6 +96,9 @@ namespace RpaUi
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
+            var context = new CustomAssemblyLoadContext();
+            context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "libwkhtmltox.dll"));
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
         }
         public void Configure(IApplicationBuilder app, IBackgroundJobClient backgroundJobs, IWebHostEnvironment env)
         {

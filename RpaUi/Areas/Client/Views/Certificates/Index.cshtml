@@ -24,22 +24,17 @@
             <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
                     <thead class="thead-light">
-                    <tr>
-                        <th></th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Event)
-                        </th>
+                        <tr>
+                            <th></th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Event)
+                            </th>
 
-                        <th>
-                            @Html.DisplayNameFor(model => model.EventPoints)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.CertificateDate)
-                        </th>
-
-
-                        <th></th>
-                    </tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.EventPoints)
+                            </th>
+                            <th></th>
+                        </tr>
                     </thead>
                     <tbody class="table-sm">
                         @foreach (var item in Model)
@@ -53,12 +48,8 @@
                                     @Html.DisplayFor(modelItem => item.EventPoints)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.CertificateDate)
-                                </td>
-
-
-                                <td>
-                                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success" title="View"><i class="fas fa-folder-open"></i></a>
+                                    <a asp-action="Download" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success" title="Download"><i class="fas fa-download"></i></a>
                                 </td>
                             </tr>
                         }

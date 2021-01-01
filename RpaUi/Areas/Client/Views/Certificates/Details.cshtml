@@ -5,45 +5,66 @@
     Layout = "~/Views/Shared/_ClientLayout.cshtml";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>tblCertificates</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EventPoints)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EventPoints)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CertificateDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CertificateDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.tblPharmacists)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.tblPharmacists.ApplicationUserId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Event)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Event.EventDescription)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Created)
-        </dd>
-    </dl>
+<div class="content-header">
+    <div class="container">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h3> @Html.DisplayFor(model => model.Event.EventName) <small>Certificate</small></h3>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<!-- /.content-header -->
+
+<div class="card">
+    <div class="card-header">
+        <a asp-action="Index" class="btn btn-sm btn-outline-success"><i class="fas fa-backward"></i> Back to List</a>
+        <a asp-action="Download" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-success"> <i class="fas fa-download"></i> Download</a>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Event)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Event.EventName)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.EventPoints)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.EventPoints)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Event.EventVenue)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Event.EventVenue)
+            </dd>
+
+            <dt class="col-sm-6">
+                Date
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Event.EventStartDate.ToString("dd-MMM-yyyy") to  @Model.Event.EventEndDate.ToString("dd-MMM-yyyy")
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Event.EventDescription)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Event.EventDescription)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.CertificateDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CertificateDate)
+            </dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Index" class="btn btn-sm btn-outline-success"><i class="fas fa-backward"></i> Back to List</a>
+    </div>
 </div>

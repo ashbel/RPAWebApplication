@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="libwkhtmltox.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="libwkhtmltox.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DinkToPdf" Version="1.0.8" />
     <PackageReference Include="Hangfire.AspNetCore" Version="1.7.11" />
     <PackageReference Include="HangFire.Core" Version="1.7.11" />
     <PackageReference Include="Hangfire.Dashboard.BasicAuthorization" Version="1.0.2" />

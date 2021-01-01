@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RpaData.DataContext;
 using RpaData.Models;
+using RpaUi.Utilities;
 
 namespace RpaUi.Areas.Client.Controllers
 {
@@ -16,10 +21,13 @@ namespace RpaUi.Areas.Client.Controllers
     public class CertificatesController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public CertificatesController(ApplicationDbContext context)
+        private readonly IConverter _converter;
+        private readonly IWebHostEnvironment _environment;
+        public CertificatesController(ApplicationDbContext context,IConverter converter, IWebHostEnvironment environment)
         {
             _context = context;
+            _converter = converter;
+            _environment = environment;
         }
 
         // GET: Client/Certificates
@@ -159,6 +167,37 @@ namespace RpaUi.Areas.Client.Controllers
             _context.tblCertificates.Remove(tblCertificates);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+
+        [HttpGet]
+        public IActionResult Download(int id)
+        {
+            var certificate = _context.tblCertificates.Include(t => t.Event)
+                .Include(t => t.tblPharmacists).ThenInclude(t => t.ApplicationUser).FirstOrDefault(c => c.Id == id);
+            var globalSettings = new GlobalSettings
+            {
+                ColorMode = ColorMode.Color,
+                Orientation = Orientation.Landscape,
+                PaperSize = PaperKind.A5,
+                Margins = new MarginSettings { Top = 10 },
+                DocumentTitle = "PDF Report"
+            };
+            var objectSettings = new ObjectSettings
+            {
+                PagesCount = true,
+                HtmlContent = TemplateGenerator.GetHTMLString(certificate),
+                WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = Path.Combine(_environment.WebRootPath, "css", "adminlte.css") },
+                HeaderSettings = {  Center = "Retail Pharmacists Association", Line = true, FontName = "Calibri", FontSize = 9},
+                FooterSettings = { Line = true, Center = "Retail Pharmacists Association", FontName = "Calibri", FontSize = 9 }
+            };
+            var pdf = new HtmlToPdfDocument()
+            {
+                GlobalSettings = globalSettings,
+                Objects = { objectSettings }
+            };
+            var file = _converter.Convert(pdf);
+            return File(file, "application/pdf", certificate.Event.EventName + "_Certificate.pdf");
         }
 
         private bool tblCertificatesExists(int id)

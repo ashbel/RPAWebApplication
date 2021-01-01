@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RpaData.DataContext;
 using RpaData.Models;
+using RpaUi.Utilities;
 
 namespace RpaUi.Controllers
 {
@@ -15,10 +19,11 @@ namespace RpaUi.Controllers
     public class CertificatesController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public CertificatesController(ApplicationDbContext context)
+        private readonly IConverter _converter;
+        public CertificatesController(ApplicationDbContext context, IConverter converter)
         {
             _context = context;
+            _converter = converter;
         }
 
         // GET: Certificates
@@ -163,6 +168,35 @@ namespace RpaUi.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        public IActionResult Download(int id)
+        {
+            var certificate = _context.tblCertificates.Include(t => t.Event)
+                .Include(t => t.tblPharmacists).ThenInclude(t => t.ApplicationUser).FirstOrDefault(c => c.Id == id);
+            var globalSettings = new GlobalSettings
+            {
+                ColorMode = ColorMode.Color,
+                Orientation = Orientation.Portrait,
+                PaperSize = PaperKind.A4,
+                Margins = new MarginSettings { Top = 10 },
+                DocumentTitle = "PDF Report"
+            };
+            var objectSettings = new ObjectSettings
+            {
+                PagesCount = true,
+                HtmlContent = TemplateGenerator.GetHTMLString(certificate),
+                WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "css", "adminlte.css") },
+                HeaderSettings = { FontName = "Arial", FontSize = 9, Right = "", Line = true },
+                FooterSettings = { FontName = "Arial", FontSize = 9, Line = true, Center = "Retail Pharmacists Association" }
+            };
+            var pdf = new HtmlToPdfDocument()
+            {
+                GlobalSettings = globalSettings,
+                Objects = { objectSettings }
+            };
+            var file = _converter.Convert(pdf);
+            return File(file, "application/pdf", certificate.Event.EventName + "_Certificate.pdf");
+        }
         private bool tblCertificatesExists(int id)
         {
             return _context.tblCertificates.Any(e => e.Id == id);

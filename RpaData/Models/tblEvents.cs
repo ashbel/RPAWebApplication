@@ -10,6 +10,7 @@ namespace RpaData.Models
         public tblEvents()
         {
             tblEventsHistory = new HashSet<tblEventsHistory>();
+            tblCertificates = new HashSet<tblCertificates>();
         }
 
 
@@ -31,7 +32,7 @@ namespace RpaData.Models
         public string EventVenue { get; set; }
 
         [Required]
-        [Display(Name = "Points to be Awarded")]
+        [Display(Name = "Points")]
         public int EventPoints { get; set; }
 
         [Required]
@@ -44,6 +45,7 @@ namespace RpaData.Models
         public bool EventComplete { get; set; }
 
         public virtual ICollection<tblEventsHistory> tblEventsHistory { get; set; }
+        public virtual ICollection<tblCertificates> tblCertificates { get; set; }
 
     }
 }
