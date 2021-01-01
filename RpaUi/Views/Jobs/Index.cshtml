@@ -1,54 +1,69 @@
 ﻿@model IEnumerable<RpaData.Models.tblJobs>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Jobs";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Jobs</h1>
-
-<div class="card">
-    <div class="card-header">
-
-        <a href="@Url.Action("ActivateJob")" class="btn btn-outline-success btn-sm"><i class="fas fa-power-off"></i> Activate Jobs</a>
-    </div>
-    <div class="card-body">
-        <table id="example2" class="table table-bordered table-hover">
-            <thead class="thead-light">
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.JobName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.JobStatus)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.JobFrequency)
-                    </th>
-                    @*<th></th>*@
-                </tr>
-            </thead>
-            <tbody  class="table-sm">
-                @foreach (var item in Model)
-                {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.JobName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.JobStatus)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.JobFrequency)
-                    </td>
-                    @*<td>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Details"><i class="fas fa-folder-open"></i></a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash-alt"></i></a>
-                    </td>*@
-                </tr>
-                }
-            </tbody>
-        </table>
-     </div>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h2 class="m-0 text-dark">@ViewData["Title"]</h2>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
 </div>
+<!-- /.content-header -->
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="card">
+            <div class="card-header">
+
+                <a href="@Url.Action("ActivateJob")" class="btn btn-outline-success btn-sm"><i class="fas fa-power-off"></i> Activate Jobs</a>
+            </div>
+            <div class="card-body">
+                <table id="example2" class="table table-bordered table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.JobName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.JobStatus)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.JobFrequency)
+                            </th>
+                            @*<th></th>*@
+                        </tr>
+                    </thead>
+                    <tbody class="table-sm">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.JobName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.JobStatus)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.JobFrequency)
+                                </td>
+                                @*<td>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a>
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Details"><i class="fas fa-folder-open"></i></a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash-alt"></i></a>
+                                    </td>*@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

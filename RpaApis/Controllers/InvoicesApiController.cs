@@ -28,27 +28,27 @@ namespace RpaApis.Controllers
 
         // GET: api/tblInvoices
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<tblInvoices>>> GettblInvoices()
+        public async Task<ActionResult<IEnumerable<tblInvoicesClient>>> GettblInvoices()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var clientId = identity.FindFirst("UserId").Value;
+            var clientId = Convert.ToInt32(identity.FindFirst("ClientId").Value);
 
-            var invoices = await _context.tblInvoices.ToListAsync();
+            var invoices = await _context.tblInvoiceClient.Include(c=>c.tblInvoices).ThenInclude(t=>t.InvoiceType).ToListAsync();
 
-            foreach(var item in invoices)
-            {
-                item.InvoiceType = _context.tblCodes.FirstOrDefault(c=>c.Id == item.InvoiceTypeId);
-                item.tblPayments = _context.tblPayments.Where(c => c.InvoiceId == item.Id && c.ClientId == clientId).ToList();
-            }
+            //foreach(var item in invoices)
+            //{
+            //    item.InvoiceType = _context.tblCodes.FirstOrDefault(c=>c.Id == item.InvoiceTypeId);
+            //    item.tblPayments = _context.tblPayments.Where(c => c.InvoiceId == item.Id && c.tblPharmacistsId == clientId).ToList();
+            //}
 
             return invoices;
         }
 
         // GET: api/tblInvoices/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<tblInvoices>> GettblInvoices(int id)
+        public async Task<ActionResult<tblInvoicesClient>> GettblInvoices(int id)
         {
-            var tblInvoices = await _context.tblInvoices.FindAsync(id);
+            var tblInvoices = await _context.tblInvoiceClient.Include(t=>t.tblInvoices).FirstOrDefaultAsync(c=>c.Id == id);
 
             if (tblInvoices == null)
             {
@@ -62,7 +62,7 @@ namespace RpaApis.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PuttblInvoices(int id, tblInvoices tblInvoices)
+        public async Task<IActionResult> PuttblInvoices(int id, tblInvoicesClient tblInvoices)
         {
             if (id != tblInvoices.Id)
             {

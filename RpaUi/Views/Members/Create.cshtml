@@ -1,0 +1,81 @@
+﻿@model RpaData.Models.tblPharmacists
+
+@{
+    ViewData["Title"] = "Pharmacist";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <h1>@ViewData["Title"]</h1>
+<div class="card ">
+    <div class="card-header">
+        <h4>Pharmacists</h4>
+    </div>
+    <div class="card-body">    
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="ApplicationUserId" class="control-label"></label>
+                        <select asp-for="ApplicationUserId" class="form-control" asp-items="ViewBag.ApplicationUserId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="tblPharmacyid" class="control-label"></label>
+                        <select asp-for="tblPharmacyid" class="form-control" asp-items="ViewBag.tblPharmacyid"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="workAddress" class="control-label"></label>
+                        <input asp-for="workAddress" class="form-control" />
+                        <span asp-validation-for="workAddress" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="qualifications" class="control-label"></label>
+                        <input asp-for="qualifications" class="form-control" />
+                        <span asp-validation-for="qualifications" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="yearsInPractice" class="control-label"></label>
+                        <input asp-for="yearsInPractice" class="form-control" />
+                        <span asp-validation-for="yearsInPractice" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="dateOfJoiningRPA" class="control-label"></label>
+                        <input asp-for="dateOfJoiningRPA" class="form-control" />
+                        <span asp-validation-for="dateOfJoiningRPA" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="goodStandingPCZ" /> @Html.DisplayNameFor(model => model.goodStandingPCZ)
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="goodStandingReasonPCZ" class="control-label"></label>
+                        <input asp-for="goodStandingReasonPCZ" class="form-control" />
+                        <span asp-validation-for="goodStandingReasonPCZ" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="goodStandingMCAZ" /> @Html.DisplayNameFor(model => model.goodStandingMCAZ)
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="goodStandingReasonMCAZ" class="control-label"></label>
+                        <input asp-for="goodStandingReasonMCAZ" class="form-control" />
+                        <span asp-validation-for="goodStandingReasonMCAZ" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary form-control" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+
+    </div>
+</div>

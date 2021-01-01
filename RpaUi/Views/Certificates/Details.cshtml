@@ -26,10 +26,10 @@
                     @Html.DisplayFor(model => model.CertificateDate)
                 </dd>
                 <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Client)
+                    @Html.DisplayNameFor(model => model.tblPharmacists)
                 </dt>
                 <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Client.FullName)
+                    @Html.DisplayFor(model => model.tblPharmacists.ApplicationUser.FullName)
                 </dd>
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.Event)

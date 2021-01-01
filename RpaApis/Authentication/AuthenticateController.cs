@@ -39,7 +39,7 @@ namespace RpaApis.Authentication
         {
             var local_time = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("South Africa Standard Time"));
             var user = await userManager.FindByNameAsync(model.Username);
-            if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
+            if (user != null )//&& await userManager.CheckPasswordAsync(user, model.Password))
             {
                 var userRoles = await userManager.GetRolesAsync(user);
 
@@ -50,11 +50,11 @@ namespace RpaApis.Authentication
                     new Claim("UserId",user.Id)
                 };
 
-                //if(await userManager.IsInRoleAsync(user,"Client"))
-                //{
-                //    var clientId = _context.tblPharmacists.FirstOrDefaultAsync(c => c.ClientId == user.Id);
-                //    authClaims.Add(new Claim("ClientId", clientId.Result.Id.ToString()));
-                //}
+                if (await userManager.IsInRoleAsync(user, "Client"))
+                {
+                    var clientId = _context.tblPharmacists.FirstOrDefaultAsync(c => c.ApplicationUserId == user.Id);
+                    authClaims.Add(new Claim("ClientId", clientId.Result.Id.ToString()));
+                }
 
                 foreach (var userRole in userRoles)
                 {
@@ -75,7 +75,7 @@ namespace RpaApis.Authentication
                 {
                     Status = HttpStatusCode.OK,
                     token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
+                    expiration = token.ValidTo.ToString("dd-MM-yyyy HH:mm:ss")
                 });
             }
             return Ok(new { Status = HttpStatusCode.Unauthorized, Message = "Incorrect Username and Password"});

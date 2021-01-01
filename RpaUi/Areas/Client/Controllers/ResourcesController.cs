@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using RpaData.Models;
 
 namespace RpaUi.Areas.Client.Controllers
 {
+    [Authorize]
     [Area("Client")]
     public class ResourcesController : Controller
     {
@@ -23,7 +25,20 @@ namespace RpaUi.Areas.Client.Controllers
         // GET: Client/Resources
         public async Task<IActionResult> Index()
         {
-            return View(await _context.tblResources.ToListAsync());
+            var clientId = User.FindFirst("ClientId").Value;
+            var Id = Convert.ToInt32(clientId);
+
+            var memberships = await _context.tblMembershipClients.Where(c => c.tblPharmacistsId == Id).ToListAsync();
+
+            var resources = await _context.tblResources
+                                            .Include(t=>t.tblResourceCategory)
+                                            .Include(t => t.tblResourcesMembers)
+                                            .ThenInclude(t => t.tblMembership)
+                                            .ThenInclude(t => t.tblMembershipClients)
+                                            .ThenInclude(t => t.tblPharmacists)
+                                            .ToListAsync();
+
+            return View(resources);
         }
 
         // GET: Client/Resources/Details/5

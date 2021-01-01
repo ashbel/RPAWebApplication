@@ -29,6 +29,9 @@
                         @Html.DisplayNameFor(model => model.ResourceName)
                     </th>
                     <th>
+                        Category
+                    </th>
+                    <th>
                         Date
                     </th>
                     <th>
@@ -47,7 +50,9 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.ResourceName)
                     </td>
-
+                    <td>
+                        @Html.DisplayFor(modelItem => item.tblResourceCategory.catName)
+                    </td>
                     <td>
                         @item.Created.ToString("dd-MM-yyyy")
                     </td>

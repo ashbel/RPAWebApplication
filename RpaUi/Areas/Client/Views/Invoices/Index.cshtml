@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RpaData.Models.tblInvoices>
+﻿@model IEnumerable<RpaData.Models.tblInvoicesClient>
 
 @{
     ViewData["Title"] = "Index";
@@ -40,24 +40,24 @@
                             @Html.DisplayFor(modelItem => item.Id)
                         </td>
                         <td>
-                            <b> Invoice No. </b> INV-@item.Id.ToString("000") <br />
-                            <b>Amount Due : </b> @Html.DisplayFor(modelItem => item.Amount) <br />
-                            <b> Due Date : </b> @Html.DisplayFor(modelItem => item.DueDate) <br />
-                            <b>Item : </b>@Html.DisplayFor(modelItem => item.InvoiceType.CodeName) <br />
+                            <b> Invoice No. </b> INV-@item.tblInvoices.Id.ToString("000") <br />
+                            <b>Amount Due : </b> @Html.DisplayFor(modelItem => item.tblInvoices.Amount) <br />
+                            <b> Due Date : </b> @Html.DisplayFor(modelItem => item.tblInvoices.DueDate) <br />
+                            <b>Item : </b>@Html.DisplayFor(modelItem => item.tblInvoices.InvoiceType.CodeName) <br />
 
                             <hr />
-                            @if (item.tblPayments.Count() > 0)
+                            @if (item.tblInvoices.tblPayments.Count() > 0)
 
                             {
                                 <b>Payment Details</b>
                                 <p>
-                                    <span>@item.tblPayments.FirstOrDefault().AmountPaid.ToString("###,##.00")</span><br />
-                                    <span>@(item.tblPayments.FirstOrDefault().PaymentStatus ? "Paid" : "Pending Confirmation")</span>
+                                    <span>@item.tblInvoices.tblPayments.FirstOrDefault().AmountPaid.ToString("###,##.00")</span><br />
+                                    <span>@(item.tblInvoices.tblPayments.FirstOrDefault().PaymentStatus ? "Paid" : "Pending Confirmation")</span>
                                 </p>
                             }
                             else
                             {
-                                <a href="#addPosition" data-toggle="modal" data-target="#addPayment" data-id='["@item.Id","@item.Amount","@item.InvoiceTypeId","@item.InvoiceType.CodeName"]' class="addPosition btn btn-sm btn-outline-primary">
+                                <a href="#addPosition" data-toggle="modal" data-target="#addPayment" data-id='["@item.tblInvoices.Id","@item.tblInvoices.Amount","@item.tblInvoices.InvoiceTypeId","@item.tblInvoices.InvoiceType.CodeName"]' class="addPosition btn btn-sm btn-outline-primary">
                                     <i class="fas fa-money-check-alt"></i> Make Payment
                                 </a>
                             }

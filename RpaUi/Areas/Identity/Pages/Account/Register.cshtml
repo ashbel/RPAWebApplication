@@ -112,18 +112,43 @@
                             <div class="form-group">
                                 <label asp-for="Input.qualifications" class="control-label"></label>
                                 <span asp-validation-for="Input.qualifications" class="text-danger"></span><br />
-                               <div class="row">
-                                        @foreach (var item in ViewData["Qualification"] as IEnumerable<tblQualifications>)
-                                            {
-                                   <div class="col-md-6">
-                                       <div class="form-check form-check-inline">
-                                           <input asp-for="Input.qualifications" class="form-check-input" type="checkbox" id="@item.qName" value="@item.Id">
-                                           <label class="form-check-label" for="inlineCheckbox1">@item.qName</label>
-                                       </div>
-                                   </div>
-                                            }
-                                    </div>                              
-                            </div>
+                            <div class="row">
+                                @{ foreach (var item in ViewData["Qualification"] as IEnumerable<tblQualifications>)
+                                    {
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                @if (Model.Input?.qualifications != null)
+                                                {
+                                                    List<string> v = Model.Input.qualifications.Split(',').ToList();
+                                                    if (v.Contains(item.Id.ToString()))
+                                                    {
+                                                        <input name="Input.qualifications" class="form-check-input" type="checkbox" id="@item.qName" value="@item.Id" checked>
+                                                    }
+
+                                                    else
+                                                    {
+                                                        <input name="Input.qualifications" class="form-check-input" type="checkbox" id="@item.qName" value="@item.Id">
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <input asp-for="Input.qualifications" class="form-check-input" type="checkbox" id="@item.qName" value="@item.Id">
+                                                }
+                                                <label class="form-check-label" for="inlineCheckbox1">@item.qName</label>
+                                                @if(item.qName == "Other")
+                                                {                                                                                                                                                                                                                                             
+                                               <br /><input asp-for="Input.otherQualification" class="form-control inline" />
+                                                <span asp-validation-for="Input.otherQualification" class="text-danger"></span>                                                                                                                          
+                                                }
+                                            </div>
+
+
+                                        </div>
+                                    }
+                                }
+                                                                                                       
+                            </div>                              
+                           </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">

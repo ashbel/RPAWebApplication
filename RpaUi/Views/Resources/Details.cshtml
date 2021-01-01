@@ -1,43 +1,131 @@
 ﻿@model RpaData.Models.tblResources
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Resource Types";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
 
-<div>
-    <h4>tblResources</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ResourceName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ResourceName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ResourceDescription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ResourceDescription)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FileName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FileName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Created)
-        </dd>
-    </dl>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h2 class="m-0 text-dark">@ViewData["Title"]</h2>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+<!-- /.content-header -->
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="card ">
+            <div class="card-header">
+              <h4>Resource Details</h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-12">
+                        @Html.DisplayNameFor(model => model.ResourceName)
+                    </dt>
+                    <dd class="col-sm-12">
+                        @Html.DisplayFor(model => model.ResourceName)
+                    </dd>
+                    <dt class="col-sm-12">
+                        @Html.DisplayNameFor(model => model.ResourceDescription)
+                    </dt>
+                    <dd class="col-sm-12">
+                        @Html.DisplayFor(model => model.ResourceDescription)
+                    </dd>
+                    <dt class="col-sm-12">
+                        @Html.DisplayNameFor(model => model.FileName)
+                    </dt>
+                    <dd class="col-sm-12">
+                        @Html.DisplayFor(model => model.FileName)
+                    </dd>
+                    <dt class="col-sm-12">
+                        @Html.DisplayNameFor(model => model.tblResourceCategory)
+                    </dt>
+                    <dd class="col-sm-12">
+                        @Html.DisplayFor(model => model.tblResourceCategory.catName)
+                    </dd>
+                    <dt class="col-sm-12">
+                        @Html.DisplayNameFor(model => model.Created)
+                    </dt>
+                    <dd class="col-sm-12">
+                        @Html.DisplayFor(model => model.Created)
+                    </dd>
+                </dl>
+
+                <hr />
+                <div class="row">
+                    <div class="col-md-6">
+                        <b>Can Be Accessed By</b>
+                        <table id="" class="table table-bordered table-hover display" style="width:100%">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>
+                                        Id
+                                    </th>
+                                    <th>
+                                        Name
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-sm">
+                                @foreach (var item in Model.tblResourcesMembers)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.Id
+                                        </td>
+                                        <td>
+                                            @item.tblMembership.name
+                                            <a href="@Url.Action("Remove","Resources",new { id = item.Id, resourceId = Model.Id})" class="btn btn-sm btn-outline-danger float-right" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fas fa-user-minus"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <b>Add to Resource</b>
+                        <table id="" class="table table-bordered table-hover display" style="width:100%">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>
+                                        Id
+                                    </th>
+                                    <th>
+                                        Name
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-sm">
+                                @foreach (var item in ViewBag.Membership)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.Id
+                                        </td>
+                                        <td>
+                                            @item.name
+                                            <a href="@Url.Action("Add","Resources",new { id = Model.Id, tblMembershipId = item.Id})" class="btn btn-sm btn-outline-success float-right" data-toggle="tooltip" data-placement="top" title="Add"><i class="fas fa-user-plus"></i></a>
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                <a asp-action="Index">Back to List</a>
+            </div>
+        </div>
+    </div>
+    </section>

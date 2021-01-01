@@ -1,0 +1,117 @@
+﻿@model RpaData.Models.tblMembership
+
+@{
+    ViewData["Title"] = "Membership";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h2 class="m-0 text-dark">@ViewData["Title"]</h2>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h4>Details</h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.name)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.name)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.description)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.description)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Created)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Created)
+                    </dd>
+                </dl>
+                <hr />
+                <div class="row">
+                    <div class="col-md-6">
+                        <b>Members</b>
+                        <table id="" class="table table-bordered table-hover display" style="width:100%">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>
+                                        Id
+                                    </th>
+                                    <th>
+                                        Name
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-sm">
+                                @foreach (var item in Model.tblMembershipClients)
+                                {
+                                <tr>
+                                    <td>
+                                        @item.Id
+                                    </td>
+                                    <td>
+                                        @item.tblPharmacists.ApplicationUser.FullName
+                                        <a href="@Url.Action("Remove","Membership",new { id = item.Id, itemId = Model.Id})" class="btn btn-sm btn-outline-danger float-right" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fas fa-user-minus"></i></a>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <b>Available Clients</b>
+                        <table id="" class="table table-bordered table-hover display" style="width:100%">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>
+                                        Id
+                                    </th>
+                                    <th>
+                                        Name
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-sm">
+                                @foreach (var item in ViewBag.Clients)
+                                {
+                                <tr>
+                                    <td>
+                                        @item.Id
+                                    </td>
+                                    <td>
+                                        @item.ApplicationUser.FullName
+                                        <a href="@Url.Action("Add","Membership",new { id = Model.Id, pharmaId = item.Id})" class="btn btn-sm btn-outline-success float-right" data-toggle="tooltip" data-placement="top" title="Add"><i class="fas fa-user-plus"></i></a>
+                                    </td>
+
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+                <div class="card-footer">
+                    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                    <a asp-action="Index">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </section>

@@ -25,7 +25,7 @@ namespace RpaUi.Controllers
         public async Task<IActionResult> Index()
         {
            
-            var applicationDbContext = _context.tblPayments.Include(t => t.Client).Include(t => t.PaymentType).Include(t => t.Invoice);
+            var applicationDbContext = _context.tblPayments.Include(t => t.tblPharmacists).ThenInclude(c => c.ApplicationUser).Include(t => t.PaymentType).Include(t => t.Invoice);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -38,7 +38,8 @@ namespace RpaUi.Controllers
             }
 
             var tblPayments = await _context.tblPayments
-                .Include(t => t.Client)
+                .Include(t => t.tblPharmacists)
+                .ThenInclude(c => c.ApplicationUser)
                 .Include(t => t.PaymentType)
                 .Include(t => t.Invoice)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -74,7 +75,7 @@ namespace RpaUi.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "FullName", tblPayments.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "FullName", tblPayments.tblPharmacistsId);
             ViewData["PaymentTypeId"] = new SelectList(_context.tblCodes, "Id", "CodeName", tblPayments.PaymentTypeId);
             return View(tblPayments);
         }
@@ -92,7 +93,7 @@ namespace RpaUi.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "FullName", tblPayments.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "FullName", tblPayments.tblPharmacistsId);
             ViewData["PaymentTypeId"] = new SelectList(_context.tblCodes, "Id", "CodeName", tblPayments.PaymentTypeId);
             return View(tblPayments);
         }
@@ -129,7 +130,7 @@ namespace RpaUi.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "FullName", tblPayments.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Users, "Id", "FullName", tblPayments.tblPharmacistsId);
             ViewData["PaymentTypeId"] = new SelectList(_context.tblCodes, "Id", "CodeName", tblPayments.PaymentTypeId);
             return View(tblPayments);
         }
@@ -143,7 +144,8 @@ namespace RpaUi.Controllers
             }
 
             var tblPayments = await _context.tblPayments
-                .Include(t => t.Client)
+                .Include(t => t.tblPharmacists)
+                .ThenInclude(c => c.ApplicationUser)
                 .Include(t => t.PaymentType)
                 .Include(t => t.Invoice)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -171,6 +173,11 @@ namespace RpaUi.Controllers
             var tblPayments = await _context.tblPayments.FindAsync(id);
             tblPayments.PaymentStatus = true;
             _context.Update(tblPayments);
+
+            var tblPaymentsClient = await _context.tblInvoiceClient.FirstOrDefaultAsync(c => c.tblInvoicesId == tblPayments.InvoiceId && c.tblPharmacistsId == tblPayments.tblPharmacistsId);
+            tblPaymentsClient.paid = true;
+            _context.Update(tblPaymentsClient);
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), new { id = id});
         }

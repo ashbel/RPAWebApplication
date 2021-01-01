@@ -26,7 +26,8 @@ namespace RpaUi.Controllers
         // GET: Resources
         public async Task<IActionResult> Index()
         {
-            return View(await _context.tblResources.ToListAsync());
+            var applicationDbContext = _context.tblResources.Include(t => t.tblResourceCategory).Include(t=>t.tblResourcesMembers);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Resources/Details/5
@@ -37,7 +38,17 @@ namespace RpaUi.Controllers
                 return NotFound();
             }
 
+            var memebersInList = _context.tblResourcesMembers.Where(c => c.tblResourcesId == id).Select(c => c.tblMembershipId);
+
+            var memberships = from c in _context.tblMembership.Include(t => t.tblResourcesMembers)
+                          where !(memebersInList.Contains(c.Id))
+                          select c;
+
+            ViewBag.Membership = memberships;
+
             var tblResources = await _context.tblResources
+                .Include(t => t.tblResourceCategory)
+                .Include(t=>t.tblResourcesMembers).ThenInclude(t=>t.tblMembership)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tblResources == null)
             {
@@ -50,6 +61,7 @@ namespace RpaUi.Controllers
         // GET: Resources/Create
         public IActionResult Create()
         {
+            ViewData["tblResourceCategoryId"] = new SelectList(_context.Set<tblResourcesCategory>(), "Id", "catName");
             return View();
         }
 
@@ -58,7 +70,7 @@ namespace RpaUi.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ResourceName,ResourceDescription,FileName,Id")] tblResources tblResources)
+        public async Task<IActionResult> Create([Bind("ResourceName,tblResourceCategoryId,ResourceDescription,FileName,Id,Created")] tblResources tblResources)
         {
             tblResources.Created = DateTime.Now;
             var uploadFile = "";
@@ -80,12 +92,14 @@ namespace RpaUi.Controllers
 
                 tblResources.FileName = uploadFile;
             }
+
             if (ModelState.IsValid)
             {
                 _context.Add(tblResources);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["tblResourceCategoryId"] = new SelectList(_context.Set<tblResourcesCategory>(), "Id", "catName", tblResources.tblResourceCategoryId);
             return View(tblResources);
         }
 
@@ -102,6 +116,7 @@ namespace RpaUi.Controllers
             {
                 return NotFound();
             }
+            ViewData["tblResourceCategoryId"] = new SelectList(_context.Set<tblResourcesCategory>(), "Id", "catName", tblResources.tblResourceCategoryId);
             return View(tblResources);
         }
 
@@ -110,7 +125,7 @@ namespace RpaUi.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ResourceName,ResourceDescription,FileName,Id,Created")] tblResources tblResources)
+        public async Task<IActionResult> Edit(int id, [Bind("ResourceName,tblResourceCategoryId,ResourceDescription,FileName,Id,Created")] tblResources tblResources)
         {
             if (id != tblResources.Id)
             {
@@ -137,6 +152,7 @@ namespace RpaUi.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["tblResourceCategoryId"] = new SelectList(_context.Set<tblResourcesCategory>(), "Id", "catName", tblResources.tblResourceCategoryId);
             return View(tblResources);
         }
 
@@ -149,6 +165,7 @@ namespace RpaUi.Controllers
             }
 
             var tblResources = await _context.tblResources
+                .Include(t => t.tblResourceCategory)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tblResources == null)
             {
@@ -167,6 +184,28 @@ namespace RpaUi.Controllers
             _context.tblResources.Remove(tblResources);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Add(int id, int tblMembershipId)
+        {
+            tblResourcesMember tblResourcesMember = new tblResourcesMember();
+            tblResourcesMember.Created = DateTime.Now;
+            tblResourcesMember.tblMembershipId = tblMembershipId;
+            tblResourcesMember.tblResourcesId = id;
+
+            _context.Add(tblResourcesMember);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = id });
+        }
+
+        public async Task<IActionResult> Remove(int id, int resourceId)
+        {
+            var tblResourcesMember = await _context.tblResourcesMembers.FindAsync(id);
+            _context.tblResourcesMembers.Remove(tblResourcesMember);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = resourceId });
         }
 
         private bool tblResourcesExists(int id)

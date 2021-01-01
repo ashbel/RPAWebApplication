@@ -1,4 +1,4 @@
-﻿@model RpaData.Models.tblEvents
+﻿@model RpaData.Models.tblEventsHistory
 
 @{
     ViewData["Title"] = "Details";
@@ -11,7 +11,7 @@
     <div class="container">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h3> @Html.DisplayFor(model => model.EventName) - Details</h3>
+                <h3> @Html.DisplayFor(model => model.Event.EventName) - Details</h3>
             </div><!-- /.col -->
             <div class="col-sm-6">
             </div><!-- /.col -->
@@ -24,26 +24,21 @@
     <div class="card-body">
         <div>
             <a asp-action="Index" class="btn btn-sm btn-outline-success">  <i class="fas fa-long-arrow-alt-left"></i> Back to List</a>
-            @if (Model.tblEventsHistory.Count() > 0)
-            {
-                bool? attending = Model.tblEventsHistory.FirstOrDefault()?.Attending;
-                bool? attendend = Model.tblEventsHistory.FirstOrDefault()?.AttendedEvent;
-
-
-                @if (attending.Value)
+            @{
+                if (!Model.Event.EventComplete)
                 {
-                    <a href="@Url.Action("Confirm", "Events", new { id = Model.Id, attend = false })" class="btn btn-sm btn-outline-danger">  <i class="far fa-thumbs-down"></i> RSVP (Decline)</a>
-                }
-                else
-                {
-                    <a href="@Url.Action("Confirm", "Events", new { id = Model.Id, attend = true })" class="btn btn-sm btn-outline-primary">  <i class="far fa-thumbs-up"></i>  RSVP (Accept)</a>
-                }
+                    if (Model.Attending)
+                    {
+                        <a href="@Url.Action("Confirm", "Events", new {id = Model.Id, attend = false})" class="btn btn-sm btn-outline-danger"> <i class="far fa-thumbs-down"></i> RSVP (Decline)</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Confirm", "Events", new {id = Model.Id, attend = true})" class="btn btn-sm btn-outline-primary"> <i class="far fa-thumbs-up"></i> RSVP (Accept)</a>
+                    }
 
+                }
             }
-            else
-            {
-                <a href="@Url.Action("Confirm", "Events", new { id = Model.Id, attend = true })" class="btn btn-sm btn-outline-primary">  <i class="far fa-thumbs-up"></i>  RSVP (Accept)</a>
-            }
+
 
         </div>
         <div>
@@ -51,40 +46,40 @@
             <dl class="row">
 
                 <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.EventName)
+                    @Html.DisplayNameFor(model => model.Event.EventName)
                 </dt>
                 <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.EventName)
+                    @Html.DisplayFor(model => model.Event.EventName)
                 </dd>
                 <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.EventStartDate)
+                    @Html.DisplayNameFor(model => model.Event.EventStartDate)
                 </dt>
                 <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.EventStartDate)
+                    @Html.DisplayFor(model => model.Event.EventStartDate)
                 </dd>
                 <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.EventEndDate)
+                    @Html.DisplayNameFor(model => model.Event.EventEndDate)
                 </dt>
                 <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.EventEndDate)
+                    @Html.DisplayFor(model => model.Event.EventEndDate)
                 </dd>
                 <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.EventVenue)
+                    @Html.DisplayNameFor(model => model.Event.EventVenue)
                 </dt>
                 <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.EventVenue)
+                    @Html.DisplayFor(model => model.Event.EventVenue)
                 </dd>
                 <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.EventPoints)
+                    @Html.DisplayNameFor(model => model.Event.EventPoints)
                 </dt>
                 <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.EventPoints)
+                    @Html.DisplayFor(model => model.Event.EventPoints)
                 </dd>
                 <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.EventDescription)
+                    @Html.DisplayNameFor(model => model.Event.EventDescription)
                 </dt>
                 <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.EventDescription)
+                    @Html.DisplayFor(model => model.Event.EventDescription)
                 </dd>
             </dl>
             <hr />
@@ -92,13 +87,12 @@
     </div>
     <div class="card-footer">
         <a asp-action="Index" class="btn btn-sm btn-outline-success">  <i class="fas fa-long-arrow-alt-left"></i> Back to List</a>
-        @if (Model.tblEventsHistory.Count() > 0)
-        {
-            bool? attending = Model.tblEventsHistory.FirstOrDefault()?.Attending;
-            bool? attendend = Model.tblEventsHistory.FirstOrDefault()?.AttendedEvent;
+        @*@if (Model.tblEventsHistory.Count() > 0)
+        {*@
 
 
-            @if (attending.Value)
+
+            @if (Model.Attending)
             {
                 <a href="@Url.Action("Confirm", "Events", new { id = Model.Id, attend = false })" class="btn btn-sm btn-outline-danger">  <i class="far fa-thumbs-down"></i> RSVP (Decline)</a>
             }
@@ -107,11 +101,11 @@
                 <a href="@Url.Action("Confirm", "Events", new { id = Model.Id, attend = true })" class="btn btn-sm btn-outline-primary">  <i class="far fa-thumbs-up"></i>  RSVP (Accept)</a>
             }
 
-        }
+        @*}
         else
         {
             <a href="@Url.Action("Confirm", "Events", new { id = Model.Id, attend = true })" class="btn btn-sm btn-outline-primary">  <i class="far fa-thumbs-up"></i>  RSVP (Accept)</a>
-        }
+        }*@
     </div>
 </div>
 

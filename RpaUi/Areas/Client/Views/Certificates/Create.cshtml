@@ -1,0 +1,49 @@
+﻿@model RpaData.Models.tblCertificates
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_ClientLayout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>tblCertificates</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="tblPharmacistsId" class="control-label"></label>
+                <select asp-for="tblPharmacistsId" class ="form-control" asp-items="ViewBag.tblPharmacistsId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="EventId" class="control-label"></label>
+                <select asp-for="EventId" class ="form-control" asp-items="ViewBag.EventId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="EventPoints" class="control-label"></label>
+                <input asp-for="EventPoints" class="form-control" />
+                <span asp-validation-for="EventPoints" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CertificateDate" class="control-label"></label>
+                <input asp-for="CertificateDate" class="form-control" />
+                <span asp-validation-for="CertificateDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Created" class="control-label"></label>
+                <input asp-for="Created" class="form-control" />
+                <span asp-validation-for="Created" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

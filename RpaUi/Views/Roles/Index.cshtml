@@ -1,41 +1,58 @@
 ﻿
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Roles";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @using Microsoft.AspNetCore.Identity;
 @model IEnumerable<IdentityRole>
 
-<h1>All Roles</h1>
-<div class="card ">
-    <div class="card-header">
-        <div class="btn-group btn-group-sm pull-right">
-            <div class="btn-group btn-group-sm pull-right">
-                <a href="@Url.Action("Create")" class="btn btn-info btn-sm">CREATE</a>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h2 class="m-0 text-dark">@ViewData["Title"]</h2>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="card ">
+            <div class="card-header">
+                <div class="btn-group btn-group-sm pull-right">
+                    <div class="btn-group btn-group-sm pull-right">
+                        <a href="@Url.Action("Create")" class="btn btn-info btn-sm">CREATE</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                        <tr><th>Name</th><th>Update</th><th>Delete</th></tr>
+                    </thead>
+                    <tbody class="table-sm">
+                        @foreach (var role in Model)
+                        {
+                            <tr>
+
+                                <td>@role.Name</td>
+
+                                <td><a class="btn btn-sm btn-primary" asp-action="Update" asp-route-id="@role.Id">Update</a></td>
+                                <td>
+                                    <form asp-action="Delete" asp-route-id="@role.Id" method="post">
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                 </table>
             </div>
         </div>
     </div>
-    <div class="card-body">
-        <table id="example2" class="table table-bordered table-hover">
-            <thead>
-                <tr><th>Name</th><th>Update</th><th>Delete</th></tr>
-            </thead>
-                @foreach (var role in Model)
-                {
-                    <tr>
-         
-                        <td>@role.Name</td>
-                       
-                        <td><a class="btn btn-sm btn-primary" asp-action="Update" asp-route-id="@role.Id">Update</a></td>
-                        <td>
-                            <form asp-action="Delete" asp-route-id="@role.Id" method="post">
-                                <button type="submit" class="btn btn-sm btn-danger">
-                                    Delete
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-        </table>
-    </div>
-    </div>
+</section>

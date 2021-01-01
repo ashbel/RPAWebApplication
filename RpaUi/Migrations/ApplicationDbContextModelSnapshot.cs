@@ -247,10 +247,6 @@ namespace RpaUi.Migrations
                     b.Property<DateTime>("CertificateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ClientId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -260,11 +256,14 @@ namespace RpaUi.Migrations
                     b.Property<int>("EventPoints")
                         .HasColumnType("int");
 
+                    b.Property<int>("tblPharmacistsId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
-
                     b.HasIndex("EventId");
+
+                    b.HasIndex("tblPharmacistsId");
 
                     b.ToTable("tblCertificates");
                 });
@@ -314,6 +313,9 @@ namespace RpaUi.Migrations
 
                     b.Property<bool>("emailsent")
                         .HasColumnType("bit");
+
+                    b.Property<string>("fileName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -416,6 +418,9 @@ namespace RpaUi.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("EventComplete")
+                        .HasColumnType("bit");
+
                     b.Property<string>("EventDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -429,6 +434,9 @@ namespace RpaUi.Migrations
 
                     b.Property<int>("EventPoints")
                         .HasColumnType("int");
+
+                    b.Property<string>("EventSponsor")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EventStartDate")
                         .HasColumnType("datetime2");
@@ -455,10 +463,6 @@ namespace RpaUi.Migrations
                     b.Property<bool>("Attending")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ClientId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -468,11 +472,14 @@ namespace RpaUi.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
+                    b.Property<int>("tblPharmacistsId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
-
                     b.HasIndex("EventId");
+
+                    b.HasIndex("tblPharmacistsId");
 
                     b.ToTable("tblEventsHistory");
                 });
@@ -507,6 +514,34 @@ namespace RpaUi.Migrations
                     b.HasIndex("InvoiceTypeId");
 
                     b.ToTable("tblInvoices");
+                });
+
+            modelBuilder.Entity("RpaData.Models.tblInvoicesClient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("paid")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("tblInvoicesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("tblPharmacistsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("tblInvoicesId");
+
+                    b.HasIndex("tblPharmacistsId");
+
+                    b.ToTable("tblInvoiceClient");
                 });
 
             modelBuilder.Entity("RpaData.Models.tblJobs", b =>
@@ -579,6 +614,53 @@ namespace RpaUi.Migrations
                     b.ToTable("tblMailingListClients");
                 });
 
+            modelBuilder.Entity("RpaData.Models.tblMembership", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tblMembership");
+                });
+
+            modelBuilder.Entity("RpaData.Models.tblMembershipClient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("tblMembershipId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("tblPharmacistsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("tblMembershipId");
+
+                    b.HasIndex("tblPharmacistsId");
+
+                    b.ToTable("tblMembershipClients");
+                });
+
             modelBuilder.Entity("RpaData.Models.tblPayments", b =>
                 {
                     b.Property<int>("Id")
@@ -588,10 +670,6 @@ namespace RpaUi.Migrations
 
                     b.Property<decimal>("AmountPaid")
                         .HasColumnType("decimal(18,4)");
-
-                    b.Property<string>("ClientId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -614,13 +692,16 @@ namespace RpaUi.Migrations
                     b.Property<string>("ProofOfPayment")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<int>("tblPharmacistsId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("ClientId");
+                    b.HasKey("Id");
 
                     b.HasIndex("InvoiceId");
 
                     b.HasIndex("PaymentTypeId");
+
+                    b.HasIndex("tblPharmacistsId");
 
                     b.ToTable("tblPayments");
                 });
@@ -632,7 +713,7 @@ namespace RpaUi.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ClientId")
+                    b.Property<string>("ApplicationUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -659,6 +740,10 @@ namespace RpaUi.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
+                    b.Property<string>("otherQualification")
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
+
                     b.Property<bool>("profileComplete")
                         .HasColumnType("bit");
 
@@ -679,7 +764,7 @@ namespace RpaUi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("tblPharmacyid");
 
@@ -782,9 +867,61 @@ namespace RpaUi.Migrations
                     b.Property<string>("ResourceName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("tblResourceCategoryId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("tblResourceCategoryId");
+
                     b.ToTable("tblResources");
+                });
+
+            modelBuilder.Entity("RpaData.Models.tblResourcesCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("catDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("catName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tblResourceCategory");
+                });
+
+            modelBuilder.Entity("RpaData.Models.tblResourcesMember", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("tblMembershipId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("tblResourcesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("tblMembershipId");
+
+                    b.HasIndex("tblResourcesId");
+
+                    b.ToTable("tblResourcesMembers");
                 });
 
             modelBuilder.Entity("RpaData.Models.tblSubscriptions", b =>
@@ -855,15 +992,15 @@ namespace RpaUi.Migrations
 
             modelBuilder.Entity("RpaData.Models.tblCertificates", b =>
                 {
-                    b.HasOne("RpaData.Models.ApplicationUser", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("RpaData.Models.tblEvents", "Event")
                         .WithMany()
                         .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RpaData.Models.tblPharmacists", "tblPharmacists")
+                        .WithMany("tblCertificates")
+                        .HasForeignKey("tblPharmacistsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -890,15 +1027,15 @@ namespace RpaUi.Migrations
 
             modelBuilder.Entity("RpaData.Models.tblEventsHistory", b =>
                 {
-                    b.HasOne("RpaData.Models.ApplicationUser", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("RpaData.Models.tblEvents", "Event")
                         .WithMany("tblEventsHistory")
                         .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RpaData.Models.tblPharmacists", "tblPharmacists")
+                        .WithMany("tblEventsHistory")
+                        .HasForeignKey("tblPharmacistsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -908,6 +1045,21 @@ namespace RpaUi.Migrations
                     b.HasOne("RpaData.Models.tblCodes", "InvoiceType")
                         .WithMany()
                         .HasForeignKey("InvoiceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RpaData.Models.tblInvoicesClient", b =>
+                {
+                    b.HasOne("RpaData.Models.tblInvoices", "tblInvoices")
+                        .WithMany("tblInvoiceClients")
+                        .HasForeignKey("tblInvoicesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RpaData.Models.tblPharmacists", "tblPharmacists")
+                        .WithMany("tblInvoiceClients")
+                        .HasForeignKey("tblPharmacistsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -927,14 +1079,23 @@ namespace RpaUi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RpaData.Models.tblPayments", b =>
+            modelBuilder.Entity("RpaData.Models.tblMembershipClient", b =>
                 {
-                    b.HasOne("RpaData.Models.ApplicationUser", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId")
+                    b.HasOne("RpaData.Models.tblMembership", "tblMembership")
+                        .WithMany("tblMembershipClients")
+                        .HasForeignKey("tblMembershipId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("RpaData.Models.tblPharmacists", "tblPharmacists")
+                        .WithMany("tblMembershipClients")
+                        .HasForeignKey("tblPharmacistsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RpaData.Models.tblPayments", b =>
+                {
                     b.HasOne("RpaData.Models.tblInvoices", "Invoice")
                         .WithMany("tblPayments")
                         .HasForeignKey("InvoiceId")
@@ -946,13 +1107,19 @@ namespace RpaUi.Migrations
                         .HasForeignKey("PaymentTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("RpaData.Models.tblPharmacists", "tblPharmacists")
+                        .WithMany()
+                        .HasForeignKey("tblPharmacistsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("RpaData.Models.tblPharmacists", b =>
                 {
-                    b.HasOne("RpaData.Models.ApplicationUser", "Client")
+                    b.HasOne("RpaData.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ClientId")
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -974,6 +1141,30 @@ namespace RpaUi.Migrations
                     b.HasOne("RpaData.Models.tblQualifications", "Qualification")
                         .WithMany()
                         .HasForeignKey("QualificationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RpaData.Models.tblResources", b =>
+                {
+                    b.HasOne("RpaData.Models.tblResourcesCategory", "tblResourceCategory")
+                        .WithMany("tblResources")
+                        .HasForeignKey("tblResourceCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RpaData.Models.tblResourcesMember", b =>
+                {
+                    b.HasOne("RpaData.Models.tblMembership", "tblMembership")
+                        .WithMany("tblResourcesMembers")
+                        .HasForeignKey("tblMembershipId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RpaData.Models.tblResources", "tblResources")
+                        .WithMany("tblResourcesMembers")
+                        .HasForeignKey("tblResourcesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

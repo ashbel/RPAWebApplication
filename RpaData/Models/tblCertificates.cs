@@ -10,7 +10,7 @@ namespace RpaData.Models
     {
         [Required]
         [Display(Name = "Client")]
-        public string ClientId { get; set; }
+        public int tblPharmacistsId { get; set; }
 
         [Required]
         [Display(Name = "Meeting")]
@@ -21,11 +21,11 @@ namespace RpaData.Models
         public int EventPoints { get; set; }
 
         [Required]
-        [Display(Name = "Certificate Date")]
+        [Display(Name = "Date")]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = false)]
         public DateTime CertificateDate { get; set; }
 
-        public ApplicationUser Client { get; set; }
+        public tblPharmacists tblPharmacists { get; set; }
         public tblEvents Event { get; set; }
 
         //1. Name of pharmacist

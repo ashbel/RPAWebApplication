@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,6 +14,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RpaData.DataContext;
 using RpaData.Models;
+using RpaData.Models.ViewModels;
+using RpaUi.Interfaces;
 using RpaUi.Services;
 
 namespace RpaUi.Controllers
@@ -34,7 +37,6 @@ namespace RpaUi.Controllers
             roleManager = roleMgr;
             _emailSender = emailSender;
         }
-
         // GET: Communications
         public async Task<IActionResult> Index()
         {
@@ -48,15 +50,27 @@ namespace RpaUi.Controllers
             {
                 return NotFound();
             }
+            ViewData["MailingList"] = _context.tblMailingList;
 
             var tblCommunication = await _context.tblCommunications
                 .FirstOrDefaultAsync(m => m.Id == id);
+            CommunicationViewModel communicationViewModel = new CommunicationViewModel();
+            communicationViewModel.Id = tblCommunication.Id;
+            communicationViewModel.communicationAttachment = tblCommunication.communicationAttachment;
+            communicationViewModel.Created = tblCommunication.Created;
+            communicationViewModel.emailsent = tblCommunication.emailsent;
+            communicationViewModel.fileName = tblCommunication.fileName;
+            communicationViewModel.Message = tblCommunication.Message;
+            communicationViewModel.MessageDate = tblCommunication.MessageDate;
+            communicationViewModel.Subject = tblCommunication.Subject;
+            communicationViewModel.tblCommunicationLogs = _context.tblCommunicationLogs.Include(c=>c.Client).Where(c => c.CommunicationId == id).ToList();
+            
             if (tblCommunication == null)
             {
                 return NotFound();
             }
 
-            return View(tblCommunication);
+            return View(communicationViewModel);
         }
 
         // GET: Communications/Create
@@ -73,11 +87,13 @@ namespace RpaUi.Controllers
         public async Task<IActionResult> Create([Bind("MessageDate,Subject,Message,Id,Created,communicationAttachment")] tblCommunication tblCommunication)
         {
             var uploadFile = "";
+            var originalFileName = "";
             if (Request.Form.Files.Count() > 0)
             {
                 IFormFile file = Request.Form.Files[0];
                 var filename = Guid.NewGuid().ToString() + Path.GetExtension(Path.GetFileName(file.FileName));
                 uploadFile = filename;
+                originalFileName = file.FileName;
 
                 string uploadPath = @"wwwroot\Uploads";
                 if (!Directory.Exists(Path.Combine(uploadPath)))
@@ -90,6 +106,7 @@ namespace RpaUi.Controllers
                 await file.CopyToAsync(new FileStream(filePath, FileMode.Create));
 
                 tblCommunication.communicationAttachment = uploadFile;
+                tblCommunication.fileName = originalFileName;
             }
             tblCommunication.Created = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("South Africa Standard Time"));
 
@@ -210,29 +227,51 @@ namespace RpaUi.Controllers
 
         public IActionResult SendEmail(int id)
         {
-            BackgroundJob.Enqueue(() => SendEmailJobAsync(id));
+           // BackgroundJob.Enqueue(() => SendEmailJobAsync(id));
 
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task SendEmailJobAsync(int id)
+        [HttpPost]
+        public IActionResult Send(int id)
+        {
+           string[] mailinglists = Request.Form["mailinglist"].ToArray();
+
+            BackgroundJob.Enqueue(() => SendEmailJobAsync(id, mailinglists));
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task SendEmailJobAsync(int id, string[] mailinglists = null)
         {
             var tblCommunication = await _context.tblCommunications.FirstOrDefaultAsync(m => m.Id == id);
 
             List<ApplicationUser> members = new List<ApplicationUser>();
             List<ApplicationUser> nonMembers = new List<ApplicationUser>();
 
-            foreach (var user in userManager.Users.ToList())
+            foreach(var mailinglist in mailinglists)
             {
-                if (await userManager.IsInRoleAsync(user, "Client"))
+                var mailinglistId = Convert.ToInt32(mailinglist);
+                var tblmailinglist = _context.tblMailingList.Include(c=>c.tblMailingListClients).ThenInclude(c=>c.tblPharmacist).SingleOrDefault(x=>x.Id == mailinglistId);
+
+                foreach(var mailinglistClient in tblmailinglist.tblMailingListClients)
                 {
-                    members.Add(user);
+                    ApplicationUser applicationUser = await userManager.FindByIdAsync(mailinglistClient.tblPharmacist.ApplicationUserId);
+                    members.Add(applicationUser);
                 }
             }
 
+            //foreach (var user in userManager.Users.ToList())
+            //{
+            //    if (await userManager.IsInRoleAsync(user, "Client"))
+            //    {
+            //        members.Add(user);
+            //    }
+            //}
+
             foreach (var client in members)
             {
-                await _emailSender.SendEmailWithAttachmentAsync(client.Email, tblCommunication.Subject, tblCommunication.Message,tblCommunication.communicationAttachment);
+                await _emailSender.SendEmailWithAttachmentAsync(client.Email, tblCommunication.Subject, tblCommunication.Message,tblCommunication.communicationAttachment,tblCommunication.fileName);
 
                 tblCommunicationLogs tblCommunicationLogs = new tblCommunicationLogs();
 

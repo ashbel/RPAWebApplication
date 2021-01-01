@@ -1,30 +1,30 @@
-﻿using System.Text;
-using System.Text.Encodings.Web;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.WebUtilities;
 using RpaData.Models;
+using RpaData.Models.ViewModels;
 
 namespace RpaUi.Controllers
 {
     [Authorize]
     public class UsersController : Controller
     {
-        private UserManager<ApplicationUser> userManager;
-        private RoleManager<IdentityRole> roleManager;
-        private IPasswordHasher<ApplicationUser> passwordHasher;
         private readonly IEmailSender _emailSender;
+        private IPasswordHasher<ApplicationUser> passwordHasher;
+        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public UsersController(
-                                UserManager<ApplicationUser> usrMgr,
-                                RoleManager<IdentityRole> roleMgr, 
-                                IPasswordHasher<ApplicationUser> passwordHash,
-                                 IEmailSender emailSender
-                            )
+            UserManager<ApplicationUser> usrMgr,
+            RoleManager<IdentityRole> roleMgr,
+            IPasswordHasher<ApplicationUser> passwordHash,
+            IEmailSender emailSender
+        )
         {
             userManager = usrMgr;
             roleManager = roleMgr;
@@ -32,15 +32,25 @@ namespace RpaUi.Controllers
             _emailSender = emailSender;
         }
 
-
-        public IActionResult Index()
+        public IActionResult IndexAsync()
         {
-
-            return View(userManager.Users);
+            var users = userManager.Users;
+            var userslist = new List<UserViewModel>();
+            foreach (var user in users.ToList())
+            {
+                var userViewModel = new UserViewModel();
+                userViewModel.FullName = user.FullName;
+                userViewModel.UserName = user.UserName;
+                userViewModel.Email = user.Email;
+                userViewModel.Id = user.Id;
+                userViewModel.Roles = string.Join(",", userManager.GetRolesAsync(user).Result);
+                userslist.Add(userViewModel);
+            }
+            return View(userslist);
         }
 
-        public ViewResult Create() {
-
+        public ViewResult Create()
+        {
             ViewData["Roles"] = new SelectList(roleManager.Roles, "Name", "Name");
             return View();
         }
@@ -50,55 +60,42 @@ namespace RpaUi.Controllers
         {
             if (ModelState.IsValid)
             {
-                var appUser = new ApplicationUser 
-                { 
-                    UserName = user.Email, 
-                    Email = user.Email, 
-                    DateOfBirth = user.dateOfBirth, 
-                    FirstName = user.firstName, 
-                    Gender = user.gender, 
-                    PhoneNumber = user.PhoneNumber, 
+                var appUser = new ApplicationUser
+                {
+                    UserName = user.Email,
+                    Email = user.Email,
+                    DateOfBirth = user.dateOfBirth,
+                    FirstName = user.firstName,
+                    Gender = user.gender,
+                    PhoneNumber = user.PhoneNumber,
                     LastName = user.lastName,
-                    FullName = user.firstName + " "+user.lastName,
-                    RpaNumber = user.RpaNumber
+                    FullName = user.firstName + " " + user.lastName,
+                    RpaNumber = user.RpaNumber,
+                    EmailConfirmed = true
                 };
 
-                IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
+                var result = await userManager.CreateAsync(appUser, user.Password);
                 if (result.Succeeded)
                 {
-                    //Add Users To Role
                     var role = await userManager.AddToRoleAsync(appUser, user.Roles);
-                    var code = await userManager.GenerateEmailConfirmationTokenAsync(appUser);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = appUser.Id, code = code, returnUrl = "" },
-                        protocol: Request.Scheme);
-
-                    await _emailSender.SendEmailAsync(appUser.Email, "Confirm your email",
-                        $"<p> Dear <b>" + appUser.FullName + $"</b> </p>  An account has been created for you.</br> Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
+                    await _emailSender.SendEmailAsync(appUser.Email, "Account Created",
+                        "<p> Dear <b>" + appUser.FullName + "</b> </p>  An account has been created for you.");
                     return RedirectToAction("Index");
-
                 }
-                else
-                {
-                    foreach (IdentityError error in result.Errors)
-                        ModelState.AddModelError("", error.Description);
-                }
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError("", error.Description);
             }
+
+            ViewData["Roles"] = new SelectList(roleManager.Roles, "Name", "Name", user.Roles);
             return View(user);
         }
 
         public async Task<IActionResult> Update(string id)
         {
-            ApplicationUser user = await userManager.FindByIdAsync(id);
+            var user = await userManager.FindByIdAsync(id);
             if (user != null)
                 return View(user);
-            else
-                return RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -119,21 +116,23 @@ namespace RpaUi.Controllers
 
                 //if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
                 //{
-                IdentityResult result = await userManager.UpdateAsync(user);
+                var result = await userManager.UpdateAsync(user);
                 if (result.Succeeded)
                     return RedirectToAction("Index");
-                else
-                    Errors(result);
+                Errors(result);
                 //}
             }
             else
+            {
                 ModelState.AddModelError("", "User Not Found");
+            }
+
             return View(user);
         }
 
         private void Errors(IdentityResult result)
         {
-            foreach (IdentityError error in result.Errors)
+            foreach (var error in result.Errors)
                 ModelState.AddModelError("", error.Description);
         }
     }

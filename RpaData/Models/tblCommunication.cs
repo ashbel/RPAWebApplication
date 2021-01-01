@@ -21,5 +21,8 @@ namespace RpaData.Models
         [DisplayName("Attachment")]
         public string communicationAttachment { get; set; }
 
+        [DisplayName("Attachment Name")]
+        public string fileName { get; set; }
+
     }
 }

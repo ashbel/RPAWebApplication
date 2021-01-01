@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RpaData.DataContext;
 using RpaData.Models;
+using RpaUi.Interfaces;
 using RpaUi.Services;
 
 namespace RpaUi.Controllers
@@ -163,44 +164,44 @@ namespace RpaUi.Controllers
 
         public async Task BirthdayMessageJobAsync()
         {
-            var clients = _context.tblPharmacists.Include(t => t.Client).Where(c=>c.Client.DateOfBirth.Date == DateTime.Now.Date);
+            var clients = _context.tblPharmacists.Include(t => t.ApplicationUser).Where(c=>c.ApplicationUser.DateOfBirth.Date == DateTime.Now.Date);
 
             foreach(var client in clients)
             {
-                await _emailSender.SendEmailAsync(client.Client.Email, "Birthday Message", "Dear "+ client.Client.FullName + "<p>We would like to wish you a Happy Birthday.</p> Regards <p>Retail Pharmacists Asscociation</p>");
+                await _emailSender.SendEmailAsync(client.ApplicationUser.Email, "Birthday Message", "Dear "+ client.ApplicationUser.FullName + "<p>We would like to wish you a Happy Birthday.</p> Regards <p>Retail Pharmacists Asscociation</p>");
             }
         }
 
         public async Task MembershipRenewalSevenDaysJobAsync()
         {
             var dateSevenDays = DateTime.Now.AddDays(7);
-            var clients = _context.tblPharmacists.Include(t => t.Client).Where(c => c.dateOfRenewal.Date == dateSevenDays);
+            var clients = _context.tblPharmacists.Include(t => t.ApplicationUser).Where(c => c.dateOfRenewal.Date == dateSevenDays);
 
             foreach (var client in clients)
             {
-                await _emailSender.SendEmailAsync(client.Client.Email, "Membership Renewal", "Dear " + client.Client.FullName + "<p>We would like to remind you that your membership payment will be due in the next 7 days.</p> Regards <p>Retail Pharmacists Asscociation</p>");
+                await _emailSender.SendEmailAsync(client.ApplicationUser.Email, "Membership Renewal", "Dear " + client.ApplicationUser.FullName + "<p>We would like to remind you that your membership payment will be due in the next 7 days.</p> Regards <p>Retail Pharmacists Asscociation</p>");
             }
         }
 
         public async Task MembershipRenewalOneDayJobAsync()
         {
             var dateOneDay = DateTime.Now.AddDays(1);
-            var clients = _context.tblPharmacists.Include(t => t.Client).Where(c => c.dateOfRenewal.Date == dateOneDay);
+            var clients = _context.tblPharmacists.Include(t => t.ApplicationUser).Where(c => c.dateOfRenewal.Date == dateOneDay);
 
             foreach (var client in clients)
             {
-                await _emailSender.SendEmailAsync(client.Client.Email, "Membership Renewal", "Dear " + client.Client.FullName + "<p>We would like to remind you that your membership payment is now due.</p> Regards <p>Retail Pharmacists Asscociation</p>");
+                await _emailSender.SendEmailAsync(client.ApplicationUser.Email, "Membership Renewal", "Dear " + client.ApplicationUser.FullName + "<p>We would like to remind you that your membership payment is now due.</p> Regards <p>Retail Pharmacists Asscociation</p>");
             }
         }
 
         public async Task MeetingReminderJobAsync()
         {
             var dateOneDay = DateTime.Now.AddDays(1);
-            var clients = _context.tblEventsHistory.Include(c=>c.Client).Include(c=>c.Event).Where(c => c.Event.EventStartDate.Date == dateOneDay);
+            var clients = _context.tblEventsHistory.Include(c=>c.tblPharmacists).Include(c=>c.Event).Where(c => c.Event.EventStartDate.Date == dateOneDay);
 
             foreach (var client in clients)
             {
-                await _emailSender.SendEmailAsync(client.Client.Email, "Meeting Reminder", "Dear " + client.Client.FullName + "<p>We would like to remind you of the "+ client.Event.EventName+" meeting.</p> Regards <p>Retail Pharmacists Asscociation</p>");
+                await _emailSender.SendEmailAsync(client.tblPharmacists.ApplicationUser.Email, "Meeting Reminder", "Dear " + client.tblPharmacists.ApplicationUser.FullName + "<p>We would like to remind you of the "+ client.Event.EventName+" meeting.</p> Regards <p>Retail Pharmacists Asscociation</p>");
             }
         }
 
