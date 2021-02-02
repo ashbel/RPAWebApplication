@@ -19,46 +19,330 @@
 <section class="content">
     <div class="container-fluid">
 
-        <div class="text-center">
-            <h1>Welcome</h1>
-        </div>
+        <!-- Info boxes -->
         <div class="row">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <i class="fa fa-users fa-5x" aria-hidden="true"></i>
-                        <h3 class="">Clients</h3>
-                        <hr />
-                        <p> <b class="text-orange">@ViewBag.ClientsMonth New Client/s*</b> in<b class="text-blue"> @DateTime.Now.ToString("MMMM yyyy")</b></p>
-                        <p class="text-purple"><b> @ViewBag.Client Total Clients</b></p>
-                        <hr />
+            <div class="col-md-1"></div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <a class="text-black-50" asp-controller="" asp-action="Index">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">
+                                <span class="text-orange">@ViewBag.ClientsMonth New Client/s*</span> in<span class="text-blue"> @DateTime.Now.ToString("MMMM yyyy")</span><br/>
+                                <b class="text-purple"> @ViewBag.Client Total Clients</b>
+                            </span>
+
+                        </div>
+                        <!-- /.info-box-content -->
                     </div>
-                </div>
+                </a>
+                <!-- /.info-box -->
             </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <i class="fas fa-calendar-check fa-5x"></i>
-                        <h3 class="text-center">Events</h3>
-                        <hr />
-                        <p><b class="text-orange">@ViewBag.VehiclesMonth Meeting/s*</b> in  <b class="text-blue">@DateTime.Now.ToString("MMMM yyyy")</b></p>
-                        <p class="text-purple"><b>@ViewBag.Vehicles Total Meetings</b></p>
-                        <hr />
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <a class="text-black-50" asp-controller="" asp-action="">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-chalkboard-teacher"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">
+                                <span class="text-orange">@ViewBag.VehiclesMonth Meeting/s*</span> in <span class="text-blue">@DateTime.Now.ToString("MMMM yyyy")</span><br/>
+                                <b class="text-purple">@ViewBag.Vehicles Total Meetings</b>
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
                     </div>
-                </div>
+                </a>
+                <!-- /.info-box -->
             </div>
-            <div class="col-md-4">
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <a class="text-black-50" asp-controller="" asp-action="Index">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-info elevation-1"><i class="far fa-chart-bar"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">
+                                <span class="text-orange">@ViewBag.WashesMonth Revenue*(@ViewBag.WashesCountMonth)</span> in <span class="text-blue">@DateTime.Now.ToString("MMMM yyyy")</span><br/>
+                                <b class="text-purple">@ViewBag.Washes Total Revenue(@ViewBag.WashesCount)</b>
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </a>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+
+            <!-- /.col-md-6 -->
+            <div class="col-lg-6">
                 <div class="card">
-                    <div class="card-body text-center">
-                        <i class="fas fa-chart-line  fa-5x"></i>
-                        <h3 class="text-center">Payments</h3>
-                        <hr />
-                        <p><b class="text-orange">@ViewBag.WashesMonth Revenue*(@ViewBag.WashesCountMonth)</b>  in  <b class="text-blue">@DateTime.Now.ToString("MMMM yyyy")</b></p>
-                        <p class="text-purple"><b>@ViewBag.Washes Total Revenue(@ViewBag.WashesCount)</b></p>
-                        <hr />
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between">
+                            <h3 class="card-title">All Members</h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- /.d-flex -->
+                        <div class="position-relative mb-4">
+                            <canvas id="barChart" height="100"></canvas>
+                        </div>
                     </div>
                 </div>
+
+            </div>
+            <!-- /.col-md-6 -->
+            <!-- /.col-md-6 -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between">
+                            <h3 class="card-title">Meetings</h3>
+                            @*<a href="javascript:void(0);">View Report</a>*@
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- /.d-flex -->
+
+                        <div class="position-relative mb-4">
+                            <canvas id="projects-chart" height="100"></canvas>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.col-md-6 -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between">
+                            <h3 class="card-title">Members Age Profile</h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- /.d-flex -->
+                        <div class="position-relative mb-4">
+                            <canvas id="memberAgeChart" height="100"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.col-md-6 -->
+            <!-- /.col-md-6 -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between">
+                            <h3 class="card-title">Memberships</h3>
+                            @*<a href="javascript:void(0);">View Report</a>*@
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- /.d-flex -->
+
+                        <div class="position-relative mb-4">
+                            <canvas id="membershipChart" height="100"></canvas>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
         </div>
+        <!-- /.row -->
     </div>
 </section>
+
+
+@section scripts {
+    <script src="~/js/Chart.js"></script>
+    <script src="~/js/Common.js"></script>
+
+    <script type="text/javascript">
+        //fields
+        var c = document.getElementById("barChart");
+        var ctx = c.getContext("2d");
+        var tData = $.getValues("/Home/MultiBarMembersGender");
+        var myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: tData,
+            options: {
+
+                title: {
+                    display: false,
+                    text: 'Month Overview'
+                },
+                scaleShowValues: true,
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            autoSkip: false,
+                            beginAtZero: true
+                        },
+
+                        gridLines: {
+                            display: false
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                legend: {
+                    display: false
+                },
+                events: ['click', 'mousemove']
+            }
+        });
+        //fields
+        var c = document.getElementById("memberAgeChart");
+        var ctx = c.getContext("2d");
+        var tData = $.getValues("/Home/MultiBarMembersAge");
+        var myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: tData,
+            options: {
+
+                title: {
+                    display: false,
+                    text: 'Month Overview'
+                },
+                scaleShowValues: true,
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            autoSkip: false,
+                            beginAtZero: true
+                        },
+
+                        gridLines: {
+                            display: false
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                legend: {
+                    display: false
+                },
+                events: ['click', 'mousemove']
+            }
+        });
+        var c = document.getElementById("membershipChart");
+        var ctx = c.getContext("2d");
+        var tData = $.getValues("/Home/MultiBarMembership");
+        var myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: tData,
+            options: {
+
+                title: {
+                    display: false,
+                    text: 'Month Overview'
+                },
+                scaleShowValues: true,
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            autoSkip: false,
+                            beginAtZero: true
+                        },
+
+                        gridLines: {
+                            display: false
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                legend: {
+                    display: false
+                },
+                events: ['click', 'mousemove']
+            }
+        });
+        //projects
+        var c = document.getElementById("projects-chart");
+        var ctx = c.getContext("2d");
+        var tData = $.getValues("/Home/MeetingsBarChart");
+        var myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: tData,
+            options: {
+
+                title: {
+                    display: false,
+                    text: 'Month Overview'
+                },
+                scaleShowValues: true,
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            autoSkip: false,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: false
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                legend: {
+                    display: false
+                },
+                events: ['click', 'mousemove']
+            }
+        });
+        //data
+        var c = document.getElementById("districts-chart");
+        var ctx = c.getContext("2d");
+        var tData = $.getValues("/Home/DistrictsBar");
+        var myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: tData,
+            options: {
+
+                title: {
+                    display: false,
+                    text: 'Month Overview'
+                },
+                scaleShowValues: true,
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            autoSkip: false,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: false
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                legend: {
+                    display: false
+                },
+                events: ['click', 'mousemove']
+            }
+        });
+    </script>
+}

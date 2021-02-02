@@ -43,14 +43,14 @@
                                 <td>
                                     <b>Meeting Name : </b> @Html.DisplayFor(modelItem => item.Event.EventName) <br />
 
-                                    <b>Date : </b>  @Html.DisplayFor(modelItem => item.Event.EventStartDate) to
+                                    <b>Date : </b>  @item.Event.EventStartDate.ToString("dd-MMM-yyyy HH:mm") to
 
-                                    @Html.DisplayFor(modelItem => item.Event.EventEndDate) <br />
+                                    @item.Event.EventEndDate.ToString("dd-MMM-yyyy HH:mm") <br />
 
                                     <b>Venue : </b> @Html.DisplayFor(modelItem => item.Event.EventVenue) <br />
 
                                     <b>Points : </b>@Html.DisplayFor(modelItem => item.Event.EventPoints) <br />
-
+                                    <b>Status : </b>@(item.Event.EventComplete?"Complete" :"Scheduled") <br/>
                                     <hr />
                                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success"><i class="fas fa-folder-open"></i> View Details</a>
                                     @if (item.Event.tblEventsHistory.Count() > 0)
@@ -58,7 +58,7 @@
                                         bool? attending = item.Event.tblEventsHistory.FirstOrDefault()?.Attending;
                                         bool? attendend = item.Event.tblEventsHistory.FirstOrDefault()?.AttendedEvent;
 
-                                        @if(!item.Event.EventComplete)
+                                        @if (!item.Event.EventComplete)
                                         {
 
                                             @if (attending.Value)

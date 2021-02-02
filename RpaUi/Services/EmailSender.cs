@@ -36,29 +36,21 @@ namespace RpaUi.Services
         public async Task SendEmail(string email, string subject, string htmlMessage, string htmlAttachment = "", string filename="")
         {
             var email_config = _context.tblEmails.FirstOrDefault();
-
             var emailMessage = new MailMessage();
-
-
             emailMessage.From = new MailAddress(email_config.email_address, "Retail Pharmacists Association");
-
             emailMessage.To.Add(email);
             emailMessage.Subject = subject;
             emailMessage.Body = htmlMessage + "<p> Regards </p> <p><b> Retail Pharmacists Association </b></p>";
             emailMessage.IsBodyHtml = true;
-
             if (!String.IsNullOrEmpty(htmlAttachment))
             {
                 var attachment = new Attachment(uploadPath + "/" + htmlAttachment);
-
                 if (!string.IsNullOrEmpty(filename))
                 {
                     attachment.Name = filename;
-                }
-                
+                }               
                 emailMessage.Attachments.Add(attachment);
             }
-
             using (var client = new SmtpClient())
             {
                 client.Host = email_config.email_smtp;
@@ -71,6 +63,23 @@ namespace RpaUi.Services
                 //await client.(true).ConfigureAwait(false);
             }
         }
+
+        //public async Task SendEmail(string email, string subject, string htmlMessage, string htmlAttachment = "", string filename = "")
+        //{
+        //    var email_config = _context.tblEmails.FirstOrDefault();
+        //    var apiKey = "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";
+        //    var client = new SendGridClient(apiKey);
+        //    var from = new EmailAddress(email_config.email_address, "Retail Pharmacists Association");
+        //    var to = new EmailAddress(email);
+        //    var msg = MailHelper.CreateSingleEmail(from, to, subject, "", htmlMessage + " <p> Regards </p> <p><b> Retail Pharmacists Association</b></p>");
+        //    if (!string.IsNullOrEmpty(htmlAttachment) && !string.IsNullOrEmpty(filename))
+        //    {
+        //        var bytes = File.ReadAllBytes(uploadPath + "/" + htmlAttachment);
+        //        var file = Convert.ToBase64String(bytes);
+        //        msg.AddAttachment(filename, file);
+        //    }
+        //    var response = await client.SendEmailAsync(msg);
+        //}
 
     }
 }

@@ -74,6 +74,7 @@ namespace RpaUi.Controllers
         {
             var local_time = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("South Africa Standard Time"));
             tblEvents.Created = local_time;
+            tblEvents.Guid = Guid.NewGuid().ToString();
 
             if (ModelState.IsValid)
             {
@@ -105,7 +106,7 @@ namespace RpaUi.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EventName,EventStartDate,EventEndDate,EventVenue,EventPoints,EventDescription,Id,Created")] tblEvents tblEvents)
+        public async Task<IActionResult> Edit(int id, [Bind("EventName,EventStartDate,EventEndDate,EventVenue,EventPoints,EventDescription,Id,Created,Guid")] tblEvents tblEvents)
         {
             if (id != tblEvents.Id)
             {

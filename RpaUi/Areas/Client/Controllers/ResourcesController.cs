@@ -23,7 +23,7 @@ namespace RpaUi.Areas.Client.Controllers
         }
 
         // GET: Client/Resources
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index( int id =0)
         {
             var clientId = User.FindFirst("ClientId").Value;
             var Id = Convert.ToInt32(clientId);
@@ -37,6 +37,11 @@ namespace RpaUi.Areas.Client.Controllers
                                             .ThenInclude(t => t.tblMembershipClients)
                                             .ThenInclude(t => t.tblPharmacists)
                                             .ToListAsync();
+
+            if (id > 0)
+            {
+                resources = resources.Where(c => c.tblResourceCategoryId == id).ToList();
+            }
 
             return View(resources);
         }

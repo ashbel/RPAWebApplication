@@ -55,13 +55,13 @@
                     @Html.DisplayNameFor(model => model.Event.EventStartDate)
                 </dt>
                 <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Event.EventStartDate)
+                    @Model.Event.EventStartDate.ToString("f")
                 </dd>
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Event.EventEndDate)
                 </dt>
                 <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Event.EventEndDate)
+                    @Model.Event.EventEndDate.ToString("f")
                 </dd>
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Event.EventVenue)
@@ -80,6 +80,12 @@
                 </dt>
                 <dd class="col-sm-10">
                     @Html.DisplayFor(model => model.Event.EventDescription)
+                </dd>
+                <dt class="col-sm-4">
+                    Status
+                </dt>
+                <dd class="col-sm-10">
+                    @(Model.Event.EventComplete?"Complete" :"Scheduled")
                 </dd>
             </dl>
             <hr />

@@ -109,7 +109,7 @@ namespace RpaUi.Controllers
                 tblCommunication.fileName = originalFileName;
             }
             tblCommunication.Created = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("South Africa Standard Time"));
-
+            tblCommunication.Guid = Guid.NewGuid().ToString();
             if (ModelState.IsValid)
             {
                 _context.Add(tblCommunication);
@@ -140,7 +140,7 @@ namespace RpaUi.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MessageDate,Subject,Message,Id,Created,communicationAttachment")] tblCommunication tblCommunication)
+        public async Task<IActionResult> Edit(int id, [Bind("MessageDate,Subject,Message,Id,Created,communicationAttachment,Guid")] tblCommunication tblCommunication)
         {
 
             var uploadFile = "";
@@ -245,40 +245,22 @@ namespace RpaUi.Controllers
         public async Task SendEmailJobAsync(int id, string[] mailinglists = null)
         {
             var tblCommunication = await _context.tblCommunications.FirstOrDefaultAsync(m => m.Id == id);
+            
+            var tblmailinglist = _context.tblMailingListClients.Include(c => c.tblMailingList)
+                .Include(c => c.tblPharmacist)
+                .ThenInclude(t => t.ApplicationUser)
+                .Where(c => mailinglists.Contains(c.tblMailingListId.ToString()))
+                .Select(c => c.tblPharmacist)
+                .Distinct();
 
-            List<ApplicationUser> members = new List<ApplicationUser>();
-            List<ApplicationUser> nonMembers = new List<ApplicationUser>();
-
-            foreach(var mailinglist in mailinglists)
+            foreach (var client in tblmailinglist.ToList())
             {
-                var mailinglistId = Convert.ToInt32(mailinglist);
-                var tblmailinglist = _context.tblMailingList.Include(c=>c.tblMailingListClients).ThenInclude(c=>c.tblPharmacist).SingleOrDefault(x=>x.Id == mailinglistId);
-
-                foreach(var mailinglistClient in tblmailinglist.tblMailingListClients)
-                {
-                    ApplicationUser applicationUser = await userManager.FindByIdAsync(mailinglistClient.tblPharmacist.ApplicationUserId);
-                    members.Add(applicationUser);
-                }
-            }
-
-            //foreach (var user in userManager.Users.ToList())
-            //{
-            //    if (await userManager.IsInRoleAsync(user, "Client"))
-            //    {
-            //        members.Add(user);
-            //    }
-            //}
-
-            foreach (var client in members)
-            {
-                await _emailSender.SendEmailWithAttachmentAsync(client.Email, tblCommunication.Subject, tblCommunication.Message,tblCommunication.communicationAttachment,tblCommunication.fileName);
-
+                await _emailSender.SendEmailWithAttachmentAsync(client.ApplicationUser.Email, tblCommunication.Subject, tblCommunication.Message,tblCommunication.communicationAttachment,tblCommunication.fileName);
                 tblCommunicationLogs tblCommunicationLogs = new tblCommunicationLogs();
-
-                tblCommunicationLogs.ClientId = client.Id;
+                tblCommunicationLogs.ClientId = client.ApplicationUserId;
                 tblCommunicationLogs.CommunicationId = id;
                 tblCommunicationLogs.Created = DateTime.Now;
-                tblCommunicationLogs.Receipient = client.Email;
+                tblCommunicationLogs.Receipient = client.ApplicationUser.Email;
 
                 _context.Add(tblCommunicationLogs);
                 await _context.SaveChangesAsync();

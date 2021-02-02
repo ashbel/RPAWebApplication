@@ -26,9 +26,9 @@
                 <tr>
                     <th>Id</th>
                     <th>
-                        @Html.DisplayNameFor(model => model.ResourceName)
+                       Resources
                     </th>
-                    <th>
+                    @*<th>
                         Category
                     </th>
                     <th>
@@ -36,11 +36,16 @@
                     </th>
                     <th>
                         
-                    </th>
+                    </th>*@
                 </tr>
             </thead>
             <tbody  class="table-sm">
-                @foreach (var item in Model)
+                @foreach (var item in Model.GroupBy(c=>c.tblResourceCategoryId).Select(c=>new
+                {
+                    Id = c.Key,
+                    ResourceName = c.FirstOrDefault().tblResourceCategory.catName,
+                    Count = c.Count()
+                }))
                 {
                 <tr>
                     <td>
@@ -48,21 +53,25 @@
                     </td>
 
                     <td>
-                        @Html.DisplayFor(modelItem => item.ResourceName)
+                        <a asp-action="Index" asp-route-id="@item.Id">
+                            <i class="fas fa-folder-open fa-1x" style="color: darkorange"></i>
+                            @Html.DisplayFor(modelItem => item.ResourceName) (@item.Count)
+                        </a>
+                    </td>
+                    @*<td>
+                        
+                        
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.tblResourceCategory.catName)
+
                     </td>
-                    <td>
-                        @item.Created.ToString("dd-MM-yyyy")
-                    </td>
-                    <td>
-                        @if (!String.IsNullOrEmpty(item.FileName))
+                    <td>*@
+                        @*@if (!String.IsNullOrEmpty(item.FileName))
                         {
                             <a href="~/Uploads/@item.FileName" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Download"> <i class="fas fa-download fa-1x"></i></a>
                         }
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Details"><i class="fas fa-folder-open"></i></a>
-                    </td>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="Details"><i class="fas fa-folder-open"></i></a>*@
+                    @*</td>*@
                 </tr>
                 }
             </tbody>

@@ -45,7 +45,8 @@ namespace RpaApis.Controllers
                     ResourceDescription = c.ResourceDescription??"",
                     ResourceUrl = "http://rpa.co.zw/Uploads/" + c.FileName,
                     Id = c.Id,
-                    ResourceDate = c.Created.ToString("dd-MM-yyyy")
+                    ResourceDate = c.Created.ToString("dd-MM-yyyy"),
+                    Guid = c.Guid
                 })
                 .ToListAsync();
             return Ok(resources);

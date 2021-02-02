@@ -15,7 +15,7 @@ namespace RpaUi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.4")
+                .HasAnnotation("ProductVersion", "3.1.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -256,6 +256,9 @@ namespace RpaUi.Migrations
                     b.Property<int>("EventPoints")
                         .HasColumnType("int");
 
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("tblPharmacistsId")
                         .HasColumnType("int");
 
@@ -284,6 +287,9 @@ namespace RpaUi.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("tblCodes");
@@ -298,6 +304,9 @@ namespace RpaUi.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
@@ -338,6 +347,9 @@ namespace RpaUi.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Receipient")
                         .HasColumnType("nvarchar(max)");
 
@@ -363,6 +375,9 @@ namespace RpaUi.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
@@ -379,6 +394,9 @@ namespace RpaUi.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("email_address")
                         .IsRequired()
@@ -445,6 +463,9 @@ namespace RpaUi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("tblEvents");
@@ -471,6 +492,9 @@ namespace RpaUi.Migrations
 
                     b.Property<int>("EventId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("tblPharmacistsId")
                         .HasColumnType("int");
@@ -500,6 +524,9 @@ namespace RpaUi.Migrations
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("InvoiceComment")
                         .HasColumnType("nvarchar(max)");
 
@@ -525,6 +552,9 @@ namespace RpaUi.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("paid")
                         .HasColumnType("bit");
@@ -554,6 +584,9 @@ namespace RpaUi.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("JobFrequency")
                         .HasColumnType("nvarchar(max)");
 
@@ -578,6 +611,9 @@ namespace RpaUi.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ListDescription")
                         .HasColumnType("nvarchar(max)");
 
@@ -598,6 +634,9 @@ namespace RpaUi.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("tblMailingListId")
                         .HasColumnType("int");
@@ -624,6 +663,9 @@ namespace RpaUi.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("description")
                         .HasColumnType("nvarchar(max)");
 
@@ -645,6 +687,9 @@ namespace RpaUi.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("tblMembershipId")
                         .HasColumnType("int");
@@ -673,6 +718,9 @@ namespace RpaUi.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("InvoiceId")
                         .HasColumnType("int");
@@ -719,6 +767,9 @@ namespace RpaUi.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("dateOfJoiningRPA")
                         .HasColumnType("date");
@@ -812,6 +863,9 @@ namespace RpaUi.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("qDescription")
                         .HasColumnType("nvarchar(max)");
 
@@ -832,6 +886,9 @@ namespace RpaUi.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PharmacistId")
                         .HasColumnType("int");
@@ -861,6 +918,9 @@ namespace RpaUi.Migrations
                     b.Property<string>("FileName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ResourceDescription")
                         .HasColumnType("nvarchar(max)");
 
@@ -887,6 +947,9 @@ namespace RpaUi.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("catDescription")
                         .HasColumnType("nvarchar(max)");
 
@@ -908,6 +971,9 @@ namespace RpaUi.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("tblMembershipId")
                         .HasColumnType("int");
@@ -933,6 +999,9 @@ namespace RpaUi.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -993,7 +1062,7 @@ namespace RpaUi.Migrations
             modelBuilder.Entity("RpaData.Models.tblCertificates", b =>
                 {
                     b.HasOne("RpaData.Models.tblEvents", "Event")
-                        .WithMany()
+                        .WithMany("tblCertificates")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1148,7 +1217,7 @@ namespace RpaUi.Migrations
             modelBuilder.Entity("RpaData.Models.tblResources", b =>
                 {
                     b.HasOne("RpaData.Models.tblResourcesCategory", "tblResourceCategory")
-                        .WithMany("tblResources")
+                        .WithMany()
                         .HasForeignKey("tblResourceCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

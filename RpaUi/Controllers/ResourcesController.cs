@@ -73,6 +73,7 @@ namespace RpaUi.Controllers
         public async Task<IActionResult> Create([Bind("ResourceName,tblResourceCategoryId,ResourceDescription,FileName,Id,Created")] tblResources tblResources)
         {
             tblResources.Created = DateTime.Now;
+            tblResources.Guid = Guid.NewGuid().ToString();
             var uploadFile = "";
             if (Request.Form.Files.Count() > 0)
             {
@@ -125,7 +126,7 @@ namespace RpaUi.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ResourceName,tblResourceCategoryId,ResourceDescription,FileName,Id,Created")] tblResources tblResources)
+        public async Task<IActionResult> Edit(int id, [Bind("ResourceName,tblResourceCategoryId,ResourceDescription,FileName,Id,Created,Guid")] tblResources tblResources)
         {
             if (id != tblResources.Id)
             {

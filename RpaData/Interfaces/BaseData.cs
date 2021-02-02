@@ -8,5 +8,6 @@ namespace RpaData.Interfaces
     {
         public int Id { get; set; }
         public DateTime Created { get; set; }
+        public string Guid { get; set; }
     }
 }
