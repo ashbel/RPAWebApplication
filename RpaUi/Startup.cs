@@ -99,6 +99,18 @@ namespace RpaUi
             var context = new CustomAssemblyLoadContext();
             context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "libwkhtmltox.dll"));
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+            //services.AddHttpLogging(logging =>
+            //{
+            //    logging.LoggingFields = HttpLoggingFields.All;
+            //    logging.RequestHeaders.Add("sec-ch-ua");
+            //    logging.ResponseHeaders.Add("MyResponseHeader");
+            //    logging.MediaTypeOptions.AddText("application/javascript");
+            //    logging.RequestBodyLogLimit = 4096;
+            //    logging.ResponseBodyLogLimit = 4096;
+
+            //});
+            services.AddSentryTunneling();
+            services.AddHttpContextAccessor();
         }
         public void Configure(IApplicationBuilder app, IBackgroundJobClient backgroundJobs, IWebHostEnvironment env)
         {
@@ -114,6 +126,8 @@ namespace RpaUi
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseSentryTracing();
+            app.UseSentryTunneling();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseHangfireDashboard("/hangfire", new DashboardOptions

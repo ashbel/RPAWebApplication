@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Net;
 
 namespace RpaUi
 {
@@ -21,6 +17,22 @@ namespace RpaUi
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseSentry(options =>
+                    {
+                        options.Release = "1.10";
+
+                        options.MaxBreadcrumbs = 200;
+
+                        options.EnableTracing = true;
+
+                        options.DecompressionMethods = DecompressionMethods.None;
+
+                        options.MaxQueueItems = 100;
+
+                        options.ShutdownTimeout = TimeSpan.FromSeconds(5);
+
+                        options.ConfigureScope(s => s.SetTag("Always sent", "this tag"));
+                    });
                 });
     }
 }
